@@ -32,14 +32,20 @@ public class PlayGame {
       do {
          int roll = readRoll();
          aGame.roll(roll);
-
-         System.out.print(">> Was the answer correct? [y/n] ");
-         boolean correct = readYesNo();
-         if (correct) {
-            notAWinner = aGame.handleCorrectAnswer();
-         } else {
-            notAWinner = aGame.wrongAnswer();
+         if(aGame.questionAsked()){
+            System.out.print(">> Was the answer correct? [y/n] ");
+            boolean correct = readYesNo();
+            if (correct) {
+               notAWinner = aGame.handleCorrectAnswer();
+            } else {
+               notAWinner = aGame.wrongAnswer();
+            }
+         }else{
+            notAWinner = true;
+            System.out.println("ça marche blg");
          }
+
+
 
       } while (notAWinner);
       System.out.println(">> Game won!");

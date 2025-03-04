@@ -18,6 +18,7 @@ public class GameOld implements IGame {
 
    int currentPlayer = 0;
    boolean isGettingOutOfPenaltyBox;
+   boolean askedQuestion = false;
 
    public GameOld() {
       for (int i = 0; i < 50; i++) {
@@ -71,6 +72,7 @@ public class GameOld implements IGame {
          } else {
             System.out.println(players.get(currentPlayer) + " is not getting out of the penalty box");
             isGettingOutOfPenaltyBox = false;
+            askedQuestion = false;
          }
 
       } else {
@@ -88,6 +90,7 @@ public class GameOld implements IGame {
    }
 
    private void askQuestion() {
+      askedQuestion = true;
       if (currentCategory() == "Pop")
          System.out.println(popQuestions.remove(0));
       if (currentCategory() == "Science")
@@ -163,5 +166,8 @@ public class GameOld implements IGame {
 
    private boolean didPlayerWin() {
       return !(purses[currentPlayer] == 6);
+   }
+   public boolean questionAsked() {
+      return askedQuestion;
    }
 }
