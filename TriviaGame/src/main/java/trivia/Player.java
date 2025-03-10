@@ -10,7 +10,7 @@ public class Player {
         this.name = name;
         this.place = 1;
         this.purse = 0;
-        this.inPenaltyBox = false;
+        this.inPenaltyBox = false;//il n'est pas dans la boite de penalité
     }
     public void move(int roll) {
         place += roll;

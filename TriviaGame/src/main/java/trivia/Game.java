@@ -7,7 +7,6 @@ public class Game implements IGame {
    LinkedList<Player> players = new LinkedList<>();
    HashMap<String, LinkedList> questions = new HashMap<String, LinkedList>();
    Player currentPlayer ;
-   boolean isGettingOutOfPenaltyBox;
    boolean askedQuestion = false;
 
    public Game() {
@@ -60,9 +59,11 @@ public class Game implements IGame {
       System.out.println(currentPlayer + " is the current player");
       System.out.println("They have rolled a " + roll);
        // si le joueur est en prison
-
-       if (currentPlayer.isInPenaltyBox()) prisonPlay(roll);
-       else classicPlay(roll);
+       if (currentPlayer.isInPenaltyBox()){
+          prisonPlay(roll);
+       } else {
+          classicPlay(roll);
+       }
    }
 
    /**
@@ -70,14 +71,17 @@ public class Game implements IGame {
     * @param roll lancé de dé pour déterminer si le joueur peut poser une question
     */
    public void prisonPlay(int roll){
-      isGettingOutOfPenaltyBox = roll % 2 != 0;
+      boolean isGettingOutOfPenaltyBox = roll % 2 != 0;
+      System.out.println(currentPlayer.toString() +
+              ( isGettingOutOfPenaltyBox ? " is" : " is not") +
+              " getting out of the penalty box");
+
       if (isGettingOutOfPenaltyBox) {
          //cas de potentielle sortie de prison
-         System.out.println(currentPlayer + " is getting out of the penalty box");
+         currentPlayer.getOutPenalityBox();
          classicPlay(roll);
       } else {
          //reste en prison
-         System.out.println(currentPlayer + " is not getting out of the penalty box");
          askedQuestion=false;
       }
    }
@@ -106,7 +110,7 @@ public class Game implements IGame {
 
    /**
     * Récupère la catégorie de la case du player courant
-    * @return
+    * @return la catégorie
     */
    private String currentCategory() {
       var place = currentPlayer.getPlace();
@@ -119,7 +123,7 @@ public class Game implements IGame {
     * @return
     */
    public boolean handleCorrectAnswer() {
-      if (currentPlayer.isInPenaltyBox() && !isGettingOutOfPenaltyBox) {
+      if (currentPlayer.isInPenaltyBox()) {
          finTour();
          return true;
       }
