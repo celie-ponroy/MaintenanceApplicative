@@ -170,4 +170,11 @@ public class GameOld implements IGame {
    public boolean questionAsked() {
       return askedQuestion;
    }
+
+   //Passe au joueur suivant
+    public boolean nextPlayer() {
+       currentPlayer++;
+       if (currentPlayer == players.size()) currentPlayer = 0;
+       return true;
+    }
 }

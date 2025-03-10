@@ -41,8 +41,7 @@ public class PlayGame {
                notAWinner = aGame.wrongAnswer();
             }
          }else{
-            notAWinner = true;
-            System.out.println("ça marche blg");
+            notAWinner = aGame.nextPlayer();
          }
 
 

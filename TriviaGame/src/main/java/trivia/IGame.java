@@ -12,4 +12,6 @@ public interface IGame {
 
 	boolean questionAsked();
 
+	boolean nextPlayer();
+
 }
