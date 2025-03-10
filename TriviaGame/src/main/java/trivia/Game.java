@@ -1,11 +1,8 @@
 package trivia;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.List;
 
-// REFACTOR ME
 public class Game implements IGame {
    LinkedList<Player> players = new LinkedList<>();
    HashMap<String, LinkedList> questions = new HashMap<String, LinkedList>();
@@ -23,10 +20,21 @@ public class Game implements IGame {
                questions.get(category.toString()).addLast(createQuestion(category, i));
    }
 
+   /**
+    * Crée une question
+    * @param category catégorie de la question
+    * @param index index de la question
+    * @return
+    */
    public String createQuestion(String category,int index) {
       return category+" Question " + index;
    }
 
+   /**
+    * Ajoute un joueur
+    * @param playerName nom du joueur
+    * @return
+    */
    public boolean add(String playerName) {
       players.add(new Player(playerName));
 
@@ -36,10 +44,18 @@ public class Game implements IGame {
       return true;
    }
 
+   /**
+    * Nombre de joueurs
+    * @return
+    */
    public int howManyPlayers() {
       return players.size();
    }
 
+   /**
+    * Joue je tour du joueur
+    * @param roll nombre de cases à avancer
+    */
    public void roll(int roll) {
       System.out.println(currentPlayer + " is the current player");
       System.out.println("They have rolled a " + roll);
@@ -54,15 +70,14 @@ public class Game implements IGame {
     * @param roll lancé de dé pour déterminer si le joueur peut poser une question
     */
    public void prisonPlay(int roll){
-      if (roll % 2 != 0) {
+      isGettingOutOfPenaltyBox = roll % 2 != 0;
+      if (isGettingOutOfPenaltyBox) {
          //cas de potentielle sortie de prison
-         isGettingOutOfPenaltyBox = true;
          System.out.println(currentPlayer + " is getting out of the penalty box");
          classicPlay(roll);
       } else {
          //reste en prison
          System.out.println(currentPlayer + " is not getting out of the penalty box");
-         isGettingOutOfPenaltyBox = false;
          askedQuestion=false;
       }
    }
@@ -73,8 +88,6 @@ public class Game implements IGame {
     */
    public void classicPlay(int roll){
       currentPlayer.move(roll);
-
-
       System.out.println(currentPlayer
               + "'s new location is "
               + currentPlayer.getPlace());
@@ -82,20 +95,30 @@ public class Game implements IGame {
       askQuestion();
    }
 
+   /**
+    * Pose une question
+    */
    private void askQuestion() {
       askedQuestion = true;
       var category = currentCategory();
       System.out.println(questions.get(category).removeFirst());
    }
 
+   /**
+    * Récupère la catégorie de la case du player courant
+    * @return
+    */
    private String currentCategory() {
       var place = currentPlayer.getPlace();
       int categoryIndex = (place-1) % Categories.values().length;
       return Categories.values()[categoryIndex].toString();
    }
 
+   /**
+    * Gère une bonne réponse
+    * @return
+    */
    public boolean handleCorrectAnswer() {
-
       if (currentPlayer.isInPenaltyBox() && !isGettingOutOfPenaltyBox) {
          finTour();
          return true;
@@ -106,12 +129,15 @@ public class Game implements IGame {
                          + " now has "
                          + currentPlayer.getPurse()
                          + " Gold Coins.");
-
       boolean winner = didPlayerWin();
       finTour();
       return winner;
    }
 
+   /**
+    * Gère une mauvaise réponse
+    * @return
+    */
    public boolean wrongAnswer() {
       System.out.println("Question was incorrectly answered");
       System.out.println(currentPlayer + " was sent to the penalty box");
@@ -120,20 +146,37 @@ public class Game implements IGame {
      finTour();
      return true;
    }
+
+   /**
+    * gère la fin du tour
+    */
    public void finTour() {
         var nextPlayer = players.pollFirst();
         players.addLast(nextPlayer);
         currentPlayer = players.peekFirst();
    }
+
+   /**
+    * Passe le tour
+    * @return
+    */
    public boolean nextPlayer() {
       finTour();
       return true;
    }
 
-
+   /**
+    * Vérifie si le joueur a gagné
+    * @return si le joueur a gagné
+    */
    private boolean didPlayerWin() {
       return !(currentPlayer.getPurse() == 6);
    }
+
+   /**
+    * Vérifie si une question a été posée (pas de questions sur la case de penalité)
+    * @return
+    */
    public boolean questionAsked() {
       return askedQuestion;
    }
