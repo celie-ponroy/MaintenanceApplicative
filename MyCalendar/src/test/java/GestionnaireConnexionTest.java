@@ -1,14 +1,14 @@
-import org.example.Main;
+import org.example.GestionnaireConnexion;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class MainTest {
-    Main main;
+public class GestionnaireConnexionTest {
+    GestionnaireConnexion main;
     @BeforeEach
     public void setUp() {
-        main = new Main();
+        main = new GestionnaireConnexion();
     }
     @Test
     public void testConnectionConnue() {
