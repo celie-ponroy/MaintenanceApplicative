@@ -7,6 +7,10 @@ public class EventPeriodique extends Event {
 
     public EventPeriodique(  String title, String proprietaire, LocalDateTime dateDebut, int dureeMinutes, int frequenceJours) {
         super("PERIODIQUE", title, proprietaire, dateDebut, dureeMinutes);
+        //verificaiton frequence
+        if(frequenceJours < 0) {
+            throw new IllegalArgumentException("La fréquence doit être positive");
+        }
         this.frequenceJours = frequenceJours;
     }
 

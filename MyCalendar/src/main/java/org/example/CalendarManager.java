@@ -12,6 +12,7 @@ public class CalendarManager {
     }
 
     public void ajouterEvent(Event event) {
+        if(event!=null)
         events.add(event);
     }
 

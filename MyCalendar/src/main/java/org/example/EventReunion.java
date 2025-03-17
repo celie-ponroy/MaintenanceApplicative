@@ -9,7 +9,13 @@ public class EventReunion extends Event {
 
     public EventReunion( String title, String proprietaire, LocalDateTime dateDebut, int dureeMinutes, String lieu, String participants) {
         super("REUNION", title, proprietaire, dateDebut, dureeMinutes);
+        if(lieu == null || lieu.isEmpty()) {
+            throw new IllegalArgumentException("Le lieu ne peut pas être vide");
+        }
         this.lieu = lieu;
+        if(participants == null || participants.isEmpty()) {
+            throw new IllegalArgumentException("Il doit y avoir au moins un participant");
+        }
         this.participants = participants;
     }
 
