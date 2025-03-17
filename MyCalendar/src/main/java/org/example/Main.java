@@ -199,11 +199,9 @@ public class Main {
         int minute = Integer.parseInt(scanner.nextLine());
         System.out.print("Durée (en minutes) : ");
         int duree = Integer.parseInt(scanner.nextLine());
-
-        calendar.ajouterEvent("RDV_PERSONNEL", titre, gestionnaireConnexion.getUtilisateur().getNom(),
-                LocalDateTime.of(annee, moisRdv, jourRdv, heure, minute), duree,
-                "", "", 0);
-
+        Event e = FabriqueEvent.getEventRDV(titre, gestionnaireConnexion.getUtilisateur().getNom(),
+                LocalDateTime.of(annee, moisRdv, jourRdv, heure, minute), duree);
+        calendar.ajouterEvent(e);
         System.out.println("Événement ajouté.");
     }
     private void ajouterReunion(){
@@ -233,10 +231,9 @@ public class Main {
             System.out.print("Participants : " + participants);
             participants += ", " + scanner.nextLine();
         }
-
-        calendar.ajouterEvent("REUNION", titre2, gestionnaireConnexion.getUtilisateur().getNom(),
-                LocalDateTime.of(annee2, moisRdv2, jourRdv2, heure2, minute2), duree2,
-                lieu, participants, 0);
+        Event e = FabriqueEvent.getEventReunion(titre2, gestionnaireConnexion.getUtilisateur().getNom(),
+                LocalDateTime.of(annee2, moisRdv2, jourRdv2, heure2, minute2), duree2, lieu, participants);
+        calendar.ajouterEvent(e);
 
         System.out.println("Événement ajouté.");
     }
@@ -256,10 +253,9 @@ public class Main {
         System.out.print("Frequence (en jours) : ");
         int frequence = Integer.parseInt(scanner.nextLine());
 
-        calendar.ajouterEvent("PERIODIQUE", titre3, gestionnaireConnexion.getUtilisateur().getNom(),
-                LocalDateTime.of(annee3, moisRdv3, jourRdv3, heure3, minute3), 0,
-                "", "", frequence);
-
+        Event e = FabriqueEvent.getEventPeriodique(titre3, gestionnaireConnexion.getUtilisateur().getNom(),
+                LocalDateTime.of(annee3, moisRdv3, jourRdv3, heure3, minute3), 0, frequence);
+        calendar.ajouterEvent(e);
         System.out.println("Événement ajouté.");
     }
 
