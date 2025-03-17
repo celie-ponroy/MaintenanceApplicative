@@ -10,15 +10,18 @@ import java.util.Scanner;
 public class Main {
     CalendarManager calendar = new CalendarManager();
     Scanner scanner = new Scanner(System.in);
-    String utilisateur = null;
+    Utilisateur utilisateur = null;
     boolean continuer = true;
-    List<String> utilisateurs = new ArrayList();
-    List<String> motsDePasses = new ArrayList();
+    List<Utilisateur> utilisateurs = new ArrayList<>();
 
     public static void main(String[] args) {
         new Main().Lancer();
     }
+    public Main(){
+        utilisateurs.add(new Utilisateur("Roger","Chat"));
+        utilisateurs.add(new Utilisateur("Pierre","KiRouhl"));
 
+    }
     /**
      * Lancement de l'application
      */
@@ -33,15 +36,14 @@ public class Main {
 
                 switch (scanner.nextLine()) {
                     case "1":
-                        connection();
+                        menuConnexion();
                         break;
 
                     case "2":
-                        inscription();
+                        menuInscription();
                         break;
                 }
             }
-
             while (continuer && utilisateur != null) {
                 menuPrincipal();
             }
@@ -53,53 +55,58 @@ public class Main {
     /**
      * Connexion d'un utilisateur
      */
-    public void connection(){
+    public void menuConnexion(){
         System.out.print("Nom d'utilisateur: ");
-        utilisateur = scanner.nextLine();
-
-        if (utilisateur.equals("Roger")) {
-            System.out.print("Mot de passe: ");
-            String motDePasse = scanner.nextLine();
-            if (!motDePasse.equals("Chat")) {
-                utilisateur = null;
-            }
-        } else {
-            if (utilisateur.equals("Pierre")) {
-                String motDePasse = scanner.nextLine();
-                if (!motDePasse.equals("KiRouhl")) {
-                    utilisateur = null;
-                }
-            } else {
-                System.out.print("Mot de passe: ");
-                String motDePasse = scanner.nextLine();
-
-                for (int i = 0; i < utilisateurs.size(); i = i + 1) {
-                    if (utilisateurs.get(i).equals(utilisateur) && motsDePasses.get(i).equals(motDePasse)) {
-                        utilisateur = utilisateurs.get(i);
-                    }
-                }
-            }
-        }
+        String nomUtilisateur = scanner.nextLine();
+        System.out.print("Mot de passe: ");
+        String motDePasse = scanner.nextLine();
+        connexion(nomUtilisateur,motDePasse);
+    }
+    public void connexion(String nomUtilisateur,String motDePasse){
+        Utilisateur utilisateurTmp = new Utilisateur(nomUtilisateur,motDePasse);
+        //on regarde si l'utilisateur est déjà dans la liste
+        if(utilisateurs.contains(utilisateurTmp))
+            utilisateur = utilisateurTmp;
+        else
+            utilisateur = null;
     }
 
-    /**
-     * Inscription d'un nouvel utilisateur
-     */
-    public void inscription(){
-        //TODO ajouter une vérification pour éviter les doublons
+    public void menuInscription(){
         System.out.print("Nom d'utilisateur: ");
-        utilisateur = scanner.nextLine();
+        String nomUtilisateur = scanner.nextLine();
         System.out.print("Mot de passe: ");
         String motDePasse = scanner.nextLine();
         System.out.print("Répéter mot de passe: ");
-        if (scanner.nextLine().equals(motDePasse)) {
+        String secondMotDePasse = scanner.nextLine();
+        inscription(nomUtilisateur,motDePasse,secondMotDePasse);
+    }
+    /**
+     * Inscription d'un nouvel utilisateur
+     */
+    public void inscription(String nomUtilisateur,String motDePasse,String secondMotDePasse){
+        utilisateur = new Utilisateur(nomUtilisateur,motDePasse);
+        for (Utilisateur utilisateurTmp : utilisateurs) {
+            if (utilisateurTmp.getNom().equals(utilisateur.getNom())) {
+                System.out.println("Cet utilisateur existe déjà...");
+                deconnexion();
+                return;
+            }
+        }
+        if (secondMotDePasse.equals(motDePasse)) {
             utilisateurs.add(utilisateur);
-            motsDePasses.add(motDePasse);
         } else {
             System.out.println("Les mots de passes ne correspondent pas...");
-            utilisateur = null;
+            deconnexion();
         }
     }
+    public void deconnexion(){
+        utilisateur = null;
+    }
+    public Utilisateur getUtilisateur() {
+        return utilisateur;
+    }
+
+
     private static void afficherListe(List<Event> evenements) {
         if (evenements.isEmpty()) {
             System.out.println("Aucun événement trouvé pour cette période.");
@@ -232,7 +239,7 @@ public class Main {
         System.out.print("Durée (en minutes) : ");
         int duree = Integer.parseInt(scanner.nextLine());
 
-        calendar.ajouterEvent("RDV_PERSONNEL", titre, utilisateur,
+        calendar.ajouterEvent("RDV_PERSONNEL", titre, utilisateur.getNom(),
                 LocalDateTime.of(annee, moisRdv, jourRdv, heure, minute), duree,
                 "", "", 0);
 
@@ -256,7 +263,7 @@ public class Main {
         System.out.println("Lieu :");
         String lieu = scanner.nextLine();
 
-        String participants = utilisateur;
+        String participants = utilisateur.getNom();
 
         boolean encore = true;
         System.out.println("Ajouter un participant ? (oui / non)");
@@ -266,7 +273,7 @@ public class Main {
             participants += ", " + scanner.nextLine();
         }
 
-        calendar.ajouterEvent("REUNION", titre2, utilisateur,
+        calendar.ajouterEvent("REUNION", titre2, utilisateur.getNom(),
                 LocalDateTime.of(annee2, moisRdv2, jourRdv2, heure2, minute2), duree2,
                 lieu, participants, 0);
 
@@ -288,12 +295,14 @@ public class Main {
         System.out.print("Frequence (en jours) : ");
         int frequence = Integer.parseInt(scanner.nextLine());
 
-        calendar.ajouterEvent("PERIODIQUE", titre3, utilisateur,
+        calendar.ajouterEvent("PERIODIQUE", titre3, utilisateur.getNom(),
                 LocalDateTime.of(annee3, moisRdv3, jourRdv3, heure3, minute3), 0,
                 "", "", frequence);
 
         System.out.println("Événement ajouté.");
     }
+
+
     /**
      * Affiche le logo de l'application
      */
@@ -313,4 +322,5 @@ public class Main {
         System.out.println(
                 "                                                                                  |___/");
     }
+
 }

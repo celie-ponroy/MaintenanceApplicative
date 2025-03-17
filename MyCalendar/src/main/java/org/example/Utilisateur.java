@@ -21,4 +21,13 @@ public class Utilisateur {
         Utilisateur u = (Utilisateur) o;
         return u.nom.equals(nom) && u.motDePasse.equals(motDePasse);
     }
+
+    public String getNom() {
+        return nom;
+    }
+
+    @Override
+    public String toString() {
+        return nom;
+    }
 }
