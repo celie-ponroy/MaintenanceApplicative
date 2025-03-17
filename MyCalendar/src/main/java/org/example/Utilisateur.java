@@ -9,6 +9,16 @@ public class Utilisateur {
         this.motDePasse = motDePasse;
     }
     public boolean motDePasseCorrect(String motDePasse) {
-        return false;
+        return this.motDePasse.equals(motDePasse);
+    }
+    public boolean equals(Object o) {
+        if (o == this) {
+            return true;
+        }
+        if (!(o instanceof Utilisateur)) {
+            return false;
+        }
+        Utilisateur u = (Utilisateur) o;
+        return u.nom.equals(nom) && u.motDePasse.equals(motDePasse);
     }
 }
