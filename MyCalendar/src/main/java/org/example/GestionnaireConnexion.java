@@ -16,7 +16,7 @@ public class GestionnaireConnexion {
         if(utilisateurs.contains(utilisateurTmp))
             utilisateur = utilisateurTmp;
         else
-            utilisateur = null;
+            deconnexion();
     }
     /**
      * Inscription d'un nouvel utilisateur
