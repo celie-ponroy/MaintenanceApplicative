@@ -16,30 +16,24 @@ public class Main {
     public static void main(String[] args) {
         new Main().Lancer();
     }
-    public Main(){
 
-    }
     /**
      * Lancement de l'application
      */
     public void Lancer() {
-        while (true) {
+        while (continuer) {
             if (gestionnaireConnexion.getUtilisateur()== null) {
                 afficherLogo();
 
                 System.out.println("1 - Se connecter");
                 System.out.println("2 - Créer un compte");
                 System.out.println("Choix : ");
+                var choix = scanner.nextInt();
+                var actions = new ArrayList<Runnable>();
+                actions.add(this::menuConnexion);
+                actions.add(this::menuInscription);
+                actions.get(choix-1).run();
 
-                switch (scanner.nextLine()) {
-                    case "1":
-                        menuConnexion();
-                        break;
-
-                    case "2":
-                        menuInscription();
-                        break;
-                }
             }
             while (continuer && gestionnaireConnexion.getUtilisateur() != null) {
                 menuPrincipal();
@@ -52,6 +46,7 @@ public class Main {
      */
     public void menuConnexion(){
         System.out.print("Nom d'utilisateur: ");
+        scanner.nextLine();
         String nomUtilisateur = scanner.nextLine();
         System.out.print("Mot de passe: ");
         String motDePasse = scanner.nextLine();
@@ -60,6 +55,7 @@ public class Main {
 
     public void menuInscription(){
         System.out.print("Nom d'utilisateur: ");
+        scanner.nextLine();
         String nomUtilisateur = scanner.nextLine();
         System.out.print("Mot de passe: ");
         String motDePasse = scanner.nextLine();
@@ -92,34 +88,17 @@ public class Main {
         System.out.println("5 - Se déconnecter");
         System.out.print("Votre choix : ");
 
+        var actions = new ArrayList<Runnable>();
+        actions.add(this::afficherEvenements);
+        actions.add(this::ajouterRdvPerso);
+        actions.add(this::ajouterReunion);
+        actions.add(this::ajouterEvenementPeriodique);
+        actions.add(() -> {System.out.println("Déconnexion ! Voulez-vous continuer ? (O/N)");
+            continuer = scanner.nextLine().trim().contains("O");
+            gestionnaireConnexion.deconnexion();});
         String choix = scanner.nextLine();
+        actions.get(Integer.parseInt(choix)-1).run();
 
-        switch (choix) {
-            case "1":
-                // Affichage des événements
-                afficherEvenements();
-                break;
-
-            case "2":
-                ajouterRdvPerso();
-                break;
-
-            case "3":
-                // Ajout simplifié d'une réunion
-                ajouterReunion();
-                break;
-
-            case "4":
-                // Ajout simplifié d'une réunion
-                ajouterEvenementPeriodique();
-                break;
-
-            default:
-                System.out.println("Déconnexion ! Voulez-vous continuer ? (O/N)");
-                continuer = scanner.nextLine().trim().equalsIgnoreCase("oui");
-
-                gestionnaireConnexion.deconnexion();
-        }
 
     }
     private void afficherEvenements(){
@@ -132,56 +111,63 @@ public class Main {
         System.out.println("5 - Retour");
         System.out.print("Votre choix : ");
 
+        var actions = new ArrayList<Runnable>();
+        actions.add(this::afficherTousEvenements);
+        actions.add(this::afficherEvenementsMois);
+        actions.add(this::afficherEvenementsSemaine);
+        actions.add(this::afficherEvenementsJour);
+        actions.add(() -> {});
         String choix = scanner.nextLine();
-
-        switch (choix) {
-            case "1":
-                calendar.afficherEvenements();
-                break;
-
-            case "2":
-                System.out.print("Entrez l'année (AAAA) : ");
-                int anneeMois = Integer.parseInt(scanner.nextLine());
-                System.out.print("Entrez le mois (1-12) : ");
-                int mois = Integer.parseInt(scanner.nextLine());
-
-                LocalDateTime debutMois = LocalDateTime.of(anneeMois, mois, 1, 0, 0);
-                LocalDateTime finMois = debutMois.plusMonths(1).minusSeconds(1);
-
-                afficherListe(calendar.eventsDansPeriode(debutMois, finMois));
-                break;
-
-            case "3":
-                System.out.print("Entrez l'année (AAAA) : ");
-                int anneeSemaine = Integer.parseInt(scanner.nextLine());
-                System.out.print("Entrez le numéro de semaine (1-52) : ");
-                int semaine = Integer.parseInt(scanner.nextLine());
-
-                LocalDateTime debutSemaine = LocalDateTime.now()
-                        .withYear(anneeSemaine)
-                        .with(WeekFields.of(Locale.FRANCE).weekOfYear(), semaine)
-                        .with(WeekFields.of(Locale.FRANCE).dayOfWeek(), 1)
-                        .withHour(0).withMinute(0);
-                LocalDateTime finSemaine = debutSemaine.plusDays(7).minusSeconds(1);
-
-                afficherListe(calendar.eventsDansPeriode(debutSemaine, finSemaine));
-                break;
-
-            case "4":
-                System.out.print("Entrez l'année (AAAA) : ");
-                int anneeJour = Integer.parseInt(scanner.nextLine());
-                System.out.print("Entrez le mois (1-12) : ");
-                int moisJour = Integer.parseInt(scanner.nextLine());
-                System.out.print("Entrez le jour (1-31) : ");
-                int jour = Integer.parseInt(scanner.nextLine());
-
-                LocalDateTime debutJour = LocalDateTime.of(anneeJour, moisJour, jour, 0, 0);
-                LocalDateTime finJour = debutJour.plusDays(1).minusSeconds(1);
-
-                afficherListe(calendar.eventsDansPeriode(debutJour, finJour));
-                break;
-        }
+        actions.get(Integer.parseInt(choix)-1).run();
     }
+
+    private void afficherEvenementsJour() {
+        System.out.print("Entrez l'année (AAAA) : ");
+        int anneeJour = Integer.parseInt(scanner.nextLine());
+        System.out.print("Entrez le mois (1-12) : ");
+        int moisJour = Integer.parseInt(scanner.nextLine());
+        System.out.print("Entrez le jour (1-31) : ");
+        int jour = Integer.parseInt(scanner.nextLine());
+
+        LocalDateTime debutJour = LocalDateTime.of(anneeJour, moisJour, jour, 0, 0);
+        LocalDateTime finJour = debutJour.plusDays(1).minusSeconds(1);
+
+        afficherListe(calendar.eventsDansPeriode(debutJour, finJour));
+    }
+
+    private void afficherEvenementsSemaine() {
+        System.out.print("Entrez l'année (AAAA) : ");
+        int anneeSemaine = Integer.parseInt(scanner.nextLine());
+        System.out.print("Entrez le numéro de semaine (1-52) : ");
+        int semaine = Integer.parseInt(scanner.nextLine());
+
+        LocalDateTime debutSemaine = LocalDateTime.now()
+                .withYear(anneeSemaine)
+                .with(WeekFields.of(Locale.FRANCE).weekOfYear(), semaine)
+                .with(WeekFields.of(Locale.FRANCE).dayOfWeek(), 1)
+                .withHour(0).withMinute(0);
+        LocalDateTime finSemaine = debutSemaine.plusDays(7).minusSeconds(1);
+
+        afficherListe(calendar.eventsDansPeriode(debutSemaine, finSemaine));
+    }
+
+    private void afficherEvenementsMois() {
+
+        System.out.print("Entrez l'année (AAAA) : ");
+        int anneeMois = Integer.parseInt(scanner.nextLine());
+        System.out.print("Entrez le mois (1-12) : ");
+        int mois = Integer.parseInt(scanner.nextLine());
+
+        LocalDateTime debutMois = LocalDateTime.of(anneeMois, mois, 1, 0, 0);
+        LocalDateTime finMois = debutMois.plusMonths(1).minusSeconds(1);
+
+        afficherListe(calendar.eventsDansPeriode(debutMois, finMois));
+    }
+
+    private void afficherTousEvenements() {
+        calendar.afficherEvenements();
+    }
+
     //--------------------------------------Ajout des événements--------------------------------------
     private void ajouterRdvPerso(){
         // Ajout simplifié d'un RDV personnel
@@ -224,7 +210,6 @@ public class Main {
 
         String participants = gestionnaireConnexion.getUtilisateur().getNom();
 
-        boolean encore = true;
         System.out.println("Ajouter un participant ? (oui / non)");
         while (scanner.nextLine().equals("oui"))
         {
