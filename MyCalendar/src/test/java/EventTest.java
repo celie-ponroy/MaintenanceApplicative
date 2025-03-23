@@ -73,7 +73,7 @@ public class EventTest {
     @Test
     public void ReunionClassic(){
         EventReunion e = (EventReunion) FabriqueEvent.getEventReunion("Reunion", "moi", LocalDateTime.of(2026, 1, 1, 12, 0), 60, "ici", "moi");
-        assertEquals("REUNION", e.getType());
+        assertEquals(EventType.REUNION, e.getType());
         assertEquals("Reunion", e.getTitle());
         assertEquals("moi", e.getProprietaire());
         assertEquals(LocalDateTime.of(2026, 1, 1, 12, 0), e.getDateDebut());
@@ -117,6 +117,40 @@ public class EventTest {
         assertNull(e);
     }
 
+    //------------Rdv souscription----------------
+   @Test
+    public void SouscriptionClassic(){
+        Event e = FabriqueEvent.getEventSouscription("Souscription", "moi", LocalDateTime.of(2026, 1, 1, 12, 0), 60, 12.0,"Free");
+        assertEquals(EventType.SOUSCRIPTION, e.getType());
+        assertEquals("Souscription", e.getTitle());
+        assertEquals("moi", e.getProprietaire());
+        assertEquals(LocalDateTime.of(2026, 1, 1, 12, 0), e.getDateDebut());
+        assertEquals(60, e.getDureeMinutes());
+        assertEquals(12.0, ((EventSouscription) e).getPrix());
+        assertEquals("Free", ((EventSouscription) e).getEntreprise());
+   }
+   @Test
+    public void SouscriptionNullProprio(){
+       Event e = FabriqueEvent.getEventSouscription("Souscription", null, LocalDateTime.of(2026, 1, 1, 12, 0), 60, 12.0,"Free");
+       assertNull(e);
+    }
+    @Test
+    public void SouscriptionNullDate(){
+        Event e = FabriqueEvent.getEventSouscription("Souscription", "moi", null, 60, 12.0,"Free");
+        assertNull(e);
+    }
+    @Test
+    public void SouscriptionNullEntreprise(){
+        EventSouscription e = FabriqueEvent.getEventSouscription("Souscription", "moi", LocalDateTime.of(2026, 1, 1, 12, 0), 60, 12.0,null);
+        assertEquals("Inconnue",e.getEntreprise());
+
+    }
+    @Test
+    public void SouscriptionVideEntreprise(){
+        EventSouscription e = FabriqueEvent.getEventSouscription("Souscription", "moi", LocalDateTime.of(2026, 1, 1, 12, 0), 60, 12.0,"");
+        assertEquals("Inconnue",e.getEntreprise());
+
+    }
 
 
 }
