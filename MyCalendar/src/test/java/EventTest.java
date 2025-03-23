@@ -42,7 +42,7 @@ public class EventTest {
         assertEquals("moi", e.getProprietaire());
         assertEquals(LocalDateTime.of(2026, 1, 1, 12, 0), e.getDateDebut());
         assertEquals(60, e.getDureeMinutes());
-        assertEquals(7, e.frequenceJours);
+        assertEquals(7, e.getFrequenceJours());
     }
     @Test
     public void RDVPeriodiqueNullProprio(){

@@ -38,13 +38,13 @@ public class CalendarManagerTest {
                 LocalDateTime.of(2026, 3, 27, 9, 0), 30);
 
         calendar.ajouterEvent(newEvent);
-        assertTrue(calendar.events.contains(newEvent));
+        assertTrue(calendar.getEvents().contains(newEvent));
     }
 
     @Test
     void testSupprimerEvent() {
         assertTrue(calendar.supprimerEvent(event1));
-        assertFalse(calendar.events.contains(event1));
+        assertFalse(calendar.getEvents().contains(event1));
     }
 
     @Test
