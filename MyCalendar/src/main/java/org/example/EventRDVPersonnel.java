@@ -12,4 +12,8 @@ public class EventRDVPersonnel extends Event{
     public String description() {
         return "RDV : " + title + " à " + dateDebut.toString();
     }
+    @Override
+    public boolean isInPeriod(LocalDateTime debut, LocalDateTime fin) {
+        return !dateDebut.isBefore(debut) && !dateDebut.isAfter(fin);
+    }
 }

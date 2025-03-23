@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.TreeSet;
+import java.util.stream.Collectors;
 
 public class CalendarManager {
     private final TreeSet<Event> events;
@@ -13,29 +14,18 @@ public class CalendarManager {
         this.events = new TreeSet<>(Comparator.comparing(Event::getDateDebut));
     }
 
-    public void ajouterEvent(Event event) {
-        if(event!=null)
-        events.add(event);
+    public boolean ajouterEvent(Event event) {
+        if (event == null || events.stream().anyMatch(e -> conflit(e, event))) {
+            return false;
+        }
+
+        return events.add(event);
     }
 
     public List<Event> eventsDansPeriode(LocalDateTime debut, LocalDateTime fin) {
-        List<Event> result = new ArrayList<>();
-        for (Event e : events) {
-            if (e.type.equals("PERIODIQUE")) {
-                EventPeriodique eperiodique = (EventPeriodique) e;
-                LocalDateTime temp = e.dateDebut;
-                while (temp.isBefore(fin)) {
-                    if (!temp.isBefore(debut)) {
-                        result.add(e);
-                        break;
-                    }
-                    temp = temp.plusDays(eperiodique.getFrequenceJours());
-                }
-            } else if (!e.dateDebut.isBefore(debut) && !e.dateDebut.isAfter(fin)) {
-                result.add(e);
-            }
-        }
-        return result;
+        return events.stream()
+                .filter(e -> e.isInPeriod(debut, fin)) // Utilise un prédicat pour filtrer
+                .collect(Collectors.toList());
     }
 
     /**

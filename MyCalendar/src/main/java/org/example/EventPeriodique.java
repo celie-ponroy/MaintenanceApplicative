@@ -19,6 +19,17 @@ public class EventPeriodique extends Event {
         return "Événement périodique : " + title + " tous les " + frequenceJours + " jours";
 
     }
+    @Override
+    public boolean isInPeriod(LocalDateTime debut, LocalDateTime fin) {
+        LocalDateTime occurrence = this.dateDebut;
+        while (!occurrence.isAfter(fin)) {
+            if (!occurrence.isBefore(debut)) {
+                return true;  // Si l'occurrence est dans la période
+            }
+            occurrence = occurrence.plusDays(frequenceJours);  // Passage à la prochaine occurrence
+        }
+        return false;
+    }
 
     public int getFrequenceJours() {
         return frequenceJours;

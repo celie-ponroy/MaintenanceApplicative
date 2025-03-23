@@ -31,6 +31,15 @@ public abstract class Event {
 
     public abstract String description();
 
+    /**
+     * renvoi faux si la date en paramettre rentre en conflit avec la date de this
+     * @param debut
+     * @param fin
+     * @return
+     */
+    public abstract boolean isInPeriod(LocalDateTime debut, LocalDateTime fin);
+
+
     public EventType getType() {
         return type;
     }

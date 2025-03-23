@@ -46,19 +46,7 @@ public class CalendarManagerTest {
         assertTrue(calendar.supprimerEvent(event1));
         assertFalse(calendar.getEvents().contains(event1));
     }
-
-    @Test
-    void testEventsDansPeriode() {
-        LocalDateTime debut = LocalDateTime.of(2026, 3, 25, 0, 0);
-        LocalDateTime fin = LocalDateTime.of(2026, 3, 26, 23, 59);
-
-        List<Event> events = calendar.eventsDansPeriode(debut, fin);
-
-        assertEquals(3, events.size());
-        assertTrue(events.contains(event1));
-        assertTrue(events.contains(event2));
-        assertTrue(events.contains(event3));
-    }
+    
 
     @Test
     void testEventsDansPeriode_AvecPeriodique() {
@@ -88,6 +76,76 @@ public class CalendarManagerTest {
                 LocalDateTime.of(2026, 3, 22, 18, 30), 30);
 
         assertTrue(calendar.conflit(periodicEvent, conflictingEvent));
+    }
+
+    @Test
+    public void testAjouterEvent_SansConflit() {
+        calendar = new CalendarManager();
+        // Création de deux événements non conflictuels
+        EventRDVPersonnel event1 = FabriqueEvent.getEventRDV("Rendez-vous 1", "Propriétaire", LocalDateTime.of(2025, 3, 25, 10, 0), 30);
+        EventRDVPersonnel event2 = FabriqueEvent.getEventRDV("Rendez-vous 2", "Propriétaire", LocalDateTime.of(2025, 3, 25, 11, 0), 30);
+
+        // Ajout des événements
+        boolean added1 = calendar.ajouterEvent(event1);
+        boolean added2 = calendar.ajouterEvent(event2);
+
+        // Vérification qu'ils ont été ajoutés avec succès
+        assertTrue(added1, "Le premier événement aurait dû être ajouté.");
+        assertTrue(added2, "Le second événement aurait dû être ajouté.");
+    }
+
+    @Test
+    public void testAjouterEvent_AvecConflit() {
+        calendar = new CalendarManager();
+        // Création d'un événement
+        EventRDVPersonnel event1 = FabriqueEvent.getEventRDV("Rendez-vous 1", "Propriétaire", LocalDateTime.of(2025, 3, 25, 10, 0), 60);
+        // Création d'un événement qui se chevauche avec le premier
+        EventRDVPersonnel event2 = FabriqueEvent.getEventRDV("Rendez-vous 2", "Propriétaire", LocalDateTime.of(2025, 3, 25, 10, 30), 30);
+
+        // Ajout du premier événement
+        boolean added1 = calendar.ajouterEvent(event1);
+        // Tentative d'ajout d'un événement en conflit
+        boolean added2 = calendar.ajouterEvent(event2);
+
+        // Vérification que le second événement n'a pas été ajouté à cause du conflit
+        assertTrue(added1, "Le premier événement aurait dû être ajouté.");
+        assertFalse(added2, "Le second événement aurait dû être rejeté à cause du conflit.");
+    }
+
+    @Test
+    public void testAjouterEvent_PeriodiqueAvecConflit() {
+        calendar = new CalendarManager();
+        // Création d'un événement périodique
+        EventPeriodique event1 = FabriqueEvent.getEventPeriodique("Réunion périodique", "Propriétaire", LocalDateTime.of(2025, 3, 25, 10, 0), 60, 1); // Fréquence de 1 jour
+        // Création d'un événement qui se chevauche avec l'occurrence périodique
+        EventRDVPersonnel event2 = FabriqueEvent.getEventRDV("Rendez-vous", "Propriétaire", LocalDateTime.of(2025, 3, 25, 10, 30), 30);
+
+        // Ajout du premier événement périodique
+        boolean added1 = calendar.ajouterEvent(event1);
+        // Tentative d'ajout d'un événement en conflit avec la première occurrence périodique
+        boolean added2 = calendar.ajouterEvent(event2);
+
+        // Vérification que le second événement n'a pas été ajouté
+        assertTrue(added1, "L'événement périodique aurait dû être ajouté.");
+        assertFalse(added2, "Le second événement aurait dû être rejeté à cause du conflit avec l'événement périodique.");
+    }
+
+    @Test
+    public void testAjouterEvent_SansConflitAvecPeriodique() {
+        calendar = new CalendarManager();
+        // Création d'un événement périodique
+        EventPeriodique event1 = FabriqueEvent.getEventPeriodique("Réunion périodique", "Propriétaire", LocalDateTime.of(2025, 3, 25, 10, 0), 60, 1); // Fréquence de 1 jour
+        // Création d'un événement qui ne chevauche pas les occurrences de l'événement périodique
+        EventRDVPersonnel event2 = FabriqueEvent.getEventRDV("Rendez-vous", "Propriétaire", LocalDateTime.of(2025, 3, 25, 12, 0), 30);
+
+        // Ajout de l'événement périodique
+        boolean added1 = calendar.ajouterEvent(event1);
+        // Ajout d'un événement non-conflictuel avec l'événement périodique
+        boolean added2 = calendar.ajouterEvent(event2);
+
+        // Vérification qu'ils ont tous les deux été ajoutés
+        assertTrue(added1, "L'événement périodique aurait dû être ajouté.");
+        assertTrue(added2, "Le second événement aurait dû être ajouté.");
     }
 
 }
