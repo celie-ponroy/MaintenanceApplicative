@@ -3,10 +3,10 @@ package org.example;
 import java.time.LocalDateTime;
 
 public class EventPeriodique extends Event {
-    public int frequenceJours; // uniquement pour PERIODIQUE
+    public int frequenceJours;
 
     public EventPeriodique(  String title, String proprietaire, LocalDateTime dateDebut, int dureeMinutes, int frequenceJours) {
-        super("PERIODIQUE", title, proprietaire, dateDebut, dureeMinutes);
+        super(EventType.PERIODIQUE, title, proprietaire, dateDebut, dureeMinutes);
         //verificaiton frequence
         if(frequenceJours < 0) {
             throw new IllegalArgumentException("La fréquence doit être positive");

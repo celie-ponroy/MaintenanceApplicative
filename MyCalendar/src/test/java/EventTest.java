@@ -1,7 +1,4 @@
-import org.example.Event;
-import org.example.EventPeriodique;
-import org.example.EventReunion;
-import org.example.FabriqueEvent;
+import org.example.*;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
@@ -14,11 +11,11 @@ public class EventTest {
     @Test
     public void RdvpersoClassic(){
         Event e = FabriqueEvent.getEventRDV("RDV", "moi", LocalDateTime.of(2026, 1, 1, 12, 0), 60);
-        assertEquals("RDV_PERSONNEL", e.type);
-        assertEquals("RDV", e.title);
-        assertEquals("moi", e.proprietaire);
-        assertEquals(LocalDateTime.of(2026, 1, 1, 12, 0), e.dateDebut);
-        assertEquals(60, e.dureeMinutes);
+        assertEquals(EventType.RDV_PERSONNEL, e.getType());
+        assertEquals("RDV", e.getTitle());
+        assertEquals("moi", e.getProprietaire());
+        assertEquals(LocalDateTime.of(2026, 1, 1, 12, 0), e.getDateDebut());
+        assertEquals(60, e.getDureeMinutes());
     }
     @Test
     public void RdvpersoNullProprio(){
@@ -40,11 +37,11 @@ public class EventTest {
     @Test
     public void RDVPeriodiqueClassic(){
         EventPeriodique e = (EventPeriodique) FabriqueEvent.getEventPeriodique("RDV", "moi", LocalDateTime.of(2026, 1, 1, 12, 0), 60, 7);
-        assertEquals("PERIODIQUE", e.type);
-        assertEquals("RDV", e.title);
-        assertEquals("moi", e.proprietaire);
-        assertEquals(LocalDateTime.of(2026, 1, 1, 12, 0), e.dateDebut);
-        assertEquals(60, e.dureeMinutes);
+        assertEquals(EventType.PERIODIQUE, e.getType());
+        assertEquals("RDV", e.getTitle());
+        assertEquals("moi", e.getProprietaire());
+        assertEquals(LocalDateTime.of(2026, 1, 1, 12, 0), e.getDateDebut());
+        assertEquals(60, e.getDureeMinutes());
         assertEquals(7, e.frequenceJours);
     }
     @Test
@@ -76,11 +73,11 @@ public class EventTest {
     @Test
     public void ReunionClassic(){
         EventReunion e = (EventReunion) FabriqueEvent.getEventReunion("Reunion", "moi", LocalDateTime.of(2026, 1, 1, 12, 0), 60, "ici", "moi");
-        assertEquals("REUNION", e.type);
-        assertEquals("Reunion", e.title);
-        assertEquals("moi", e.proprietaire);
-        assertEquals(LocalDateTime.of(2026, 1, 1, 12, 0), e.dateDebut);
-        assertEquals(60, e.dureeMinutes);
+        assertEquals("REUNION", e.getType());
+        assertEquals("Reunion", e.getTitle());
+        assertEquals("moi", e.getProprietaire());
+        assertEquals(LocalDateTime.of(2026, 1, 1, 12, 0), e.getDateDebut());
+        assertEquals(60, e.getDureeMinutes());
         assertEquals("ici", e.lieu);
         assertEquals("moi", e.participants);
     }

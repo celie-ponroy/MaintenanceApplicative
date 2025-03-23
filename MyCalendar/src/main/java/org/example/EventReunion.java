@@ -8,7 +8,7 @@ public class EventReunion extends Event {
 
 
     public EventReunion( String title, String proprietaire, LocalDateTime dateDebut, int dureeMinutes, String lieu, String participants) {
-        super("REUNION", title, proprietaire, dateDebut, dureeMinutes);
+        super(EventType.REUNION, title, proprietaire, dateDebut, dureeMinutes);
         if(lieu == null || lieu.isEmpty()) {
             throw new IllegalArgumentException("Le lieu ne peut pas être vide");
         }

@@ -3,13 +3,13 @@ package org.example;
 import java.time.LocalDateTime;
 
 public abstract class Event {
-    public String type; // "RDV_PERSONNEL", "REUNION", "PERIODIQUE"
-    public String title;
-    public String proprietaire;
-    public LocalDateTime dateDebut;
-    public int dureeMinutes;
+    protected EventType type;
+    protected String title;
+    protected String proprietaire;
+    protected LocalDateTime dateDebut;
+    protected int dureeMinutes;
 
-    public Event(String type, String title, String proprietaire, LocalDateTime dateDebut, int dureeMinutes) {
+    public Event(EventType type, String title, String proprietaire, LocalDateTime dateDebut, int dureeMinutes) {
         this.type = type;
         this.title = title;
         this.proprietaire = proprietaire;
@@ -27,4 +27,24 @@ public abstract class Event {
     }
 
     public abstract String description();
+
+    public EventType getType() {
+        return type;
+    }
+
+    public int getDureeMinutes() {
+        return dureeMinutes;
+    }
+
+    public LocalDateTime getDateDebut() {
+        return dateDebut;
+    }
+
+    public String getProprietaire() {
+        return proprietaire;
+    }
+
+    public String getTitle() {
+        return title;
+    }
 }
