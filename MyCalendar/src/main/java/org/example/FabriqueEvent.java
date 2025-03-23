@@ -24,4 +24,11 @@ public class FabriqueEvent {
             return null;
         }
     }
+    public static EventSouscription getEventSouscription(String title, String proprietaire, LocalDateTime dateDebut, int dureeMinutes, double prix, String entreprise) {
+        try {
+            return new EventSouscription(title,proprietaire,dateDebut,dureeMinutes,prix,entreprise);
+        }catch (Exception e) {
+            return null;
+        }
+    }
 }

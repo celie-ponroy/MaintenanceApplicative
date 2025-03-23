@@ -12,6 +12,9 @@ public abstract class Event {
     public Event(EventType type, String title, String proprietaire, LocalDateTime dateDebut, int dureeMinutes) {
         this.type = type;
         this.title = title;
+        if(proprietaire==null||proprietaire.isEmpty()) {
+            throw new IllegalArgumentException("Proprietaire non valide");
+        }
         this.proprietaire = proprietaire;
         //verifications date debut
         if (dateDebut.isBefore(LocalDateTime.now())) {

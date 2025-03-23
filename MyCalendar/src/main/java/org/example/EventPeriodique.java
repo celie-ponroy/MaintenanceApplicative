@@ -3,7 +3,7 @@ package org.example;
 import java.time.LocalDateTime;
 
 public class EventPeriodique extends Event {
-    private int frequenceJours;
+    protected int frequenceJours;
 
     public EventPeriodique(  String title, String proprietaire, LocalDateTime dateDebut, int dureeMinutes, int frequenceJours) {
         super(EventType.PERIODIQUE, title, proprietaire, dateDebut, dureeMinutes);
