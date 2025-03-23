@@ -2,15 +2,13 @@ package org.example;
 
 import java.time.LocalDateTime;
 import java.time.temporal.WeekFields;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import java.util.Scanner;
+import java.util.*;
 
 public class Main {
     CalendarManager calendar = new CalendarManager();
     Scanner scanner = new Scanner(System.in);
     GestionnaireConnexion gestionnaireConnexion = new GestionnaireConnexion();
+    Menu menu = new Menu(scanner);
     boolean continuer = true;
 
     public static void main(String[] args) {
@@ -65,14 +63,13 @@ public class Main {
     }
 
     private static void afficherListe(List<Event> evenements) {
-        if (evenements.isEmpty()) {
-            System.out.println("Aucun événement trouvé pour cette période.");
-        } else {
-            System.out.println("Événements trouvés : ");
-            for (Event e : evenements) {
-                System.out.println("- " + e.description());
-            }
-        }
+        evenements.stream()
+                .map(Event::description)
+                .forEach(e -> System.out.println("- " + e));
+
+        Optional.of(evenements.isEmpty())
+                .filter(b -> b)
+                .ifPresent(b -> System.out.println("Aucun événement trouvé pour cette période."));
     }
 
     /**
@@ -80,45 +77,47 @@ public class Main {
      */
     private void menuPrincipal(){
         System.out.println("\nBonjour, " + gestionnaireConnexion.getUtilisateur());
-        System.out.println("=== Menu Gestionnaire d'Événements ===");
-        System.out.println("1 - Voir les événements");
-        System.out.println("2 - Ajouter un rendez-vous perso");
-        System.out.println("3 - Ajouter une réunion");
-        System.out.println("4 - Ajouter un évènement périodique");
-        System.out.println("5 - Se déconnecter");
-        System.out.print("Votre choix : ");
+        List<String> options = List.of(
+                "Voir les événements",
+                "Ajouter un rendez-vous perso",
+                "Ajouter une réunion",
+                "Ajouter un évènement périodique",
+                "Se déconnecter"
+        );
 
-        var actions = new ArrayList<Runnable>();
-        actions.add(this::afficherEvenements);
-        actions.add(this::ajouterRdvPerso);
-        actions.add(this::ajouterReunion);
-        actions.add(this::ajouterEvenementPeriodique);
-        actions.add(() -> {System.out.println("Déconnexion ! Voulez-vous continuer ? (O/N)");
-            continuer = scanner.nextLine().trim().contains("O");
-            gestionnaireConnexion.deconnexion();});
-        String choix = scanner.nextLine();
-        actions.get(Integer.parseInt(choix)-1).run();
-
+        List<Runnable> actions = List.of(
+                this::afficherEvenements,
+                this::ajouterRdvPerso,
+                this::ajouterReunion,
+                this::ajouterEvenementPeriodique,
+                this::deconnexion
+        );
+        menu.afficherMenu("Menu Gestionnaire d'Événements", options, actions);
 
     }
+    private void deconnexion() {
+        System.out.println("Déconnexion ! Voulez-vous continuer ? (O/N)");
+        continuer = scanner.nextLine().trim().contains("O");
+        gestionnaireConnexion.deconnexion();
+    }
     private void afficherEvenements(){
+        List<String> options = List.of(
+                "Afficher TOUS les événements",
+                "Afficher les événements d'un MOIS précis",
+                "Afficher les événements d'une SEMAINE précise",
+                "Afficher les événements d'un JOUR précis",
+                "Retour"
+        );
 
-        System.out.println("\n=== Menu de visualisation d'Événements ===");
-        System.out.println("1 - Afficher TOUS les événements");
-        System.out.println("2 - Afficher les événements d'un MOIS précis");
-        System.out.println("3 - Afficher les événements d'une SEMAINE précise");
-        System.out.println("4 - Afficher les événements d'un JOUR précis");
-        System.out.println("5 - Retour");
-        System.out.print("Votre choix : ");
+        List<Runnable> actions = List.of(
+                this::afficherTousEvenements,
+                this::afficherEvenementsMois,
+                this::afficherEvenementsSemaine,
+                this::afficherEvenementsJour,
+                () -> {} // Ne rien faire pour "Retour"
+        );
+        menu.afficherMenu("Menu de visualisation d'Événements", options, actions);
 
-        var actions = new ArrayList<Runnable>();
-        actions.add(this::afficherTousEvenements);
-        actions.add(this::afficherEvenementsMois);
-        actions.add(this::afficherEvenementsSemaine);
-        actions.add(this::afficherEvenementsJour);
-        actions.add(() -> {});
-        String choix = scanner.nextLine();
-        actions.get(Integer.parseInt(choix)-1).run();
     }
 
     private void afficherEvenementsJour() {
