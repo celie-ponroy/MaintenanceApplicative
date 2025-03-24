@@ -9,6 +9,7 @@ public class Main {
     Scanner scanner = new Scanner(System.in);
     GestionnaireConnexion gestionnaireConnexion = new GestionnaireConnexion();
     Menu menu = new Menu(scanner);
+    InputMain input = new InputMain(scanner);
     boolean continuer = true;
 
     public static void main(String[] args) {
@@ -82,6 +83,7 @@ public class Main {
                 "Ajouter un rendez-vous perso",
                 "Ajouter une réunion",
                 "Ajouter un évènement périodique",
+                "Ajouter une souscription",
                 "Se déconnecter"
         );
 
@@ -90,11 +92,13 @@ public class Main {
                 this::ajouterRdvPerso,
                 this::ajouterReunion,
                 this::ajouterEvenementPeriodique,
+                this::ajouterSouscription,
                 this::deconnexion
         );
         menu.afficherMenu("Menu Gestionnaire d'Événements", options, actions);
 
     }
+
     private void deconnexion() {
         System.out.println("Déconnexion ! Voulez-vous continuer ? (O/N)");
         continuer = scanner.nextLine().trim().contains("O");
@@ -184,7 +188,7 @@ public class Main {
         int minute = Integer.parseInt(scanner.nextLine());
         System.out.print("Durée (en minutes) : ");
         int duree = Integer.parseInt(scanner.nextLine());
-        Event e = FabriqueEvent.getEventRDV(titre, gestionnaireConnexion.getUtilisateur().getNom(),
+        Event e = FabriqueEvent.getEventRDV(titre, gestionnaireConnexion.getUtilisateur(),
                 LocalDateTime.of(annee, moisRdv, jourRdv, heure, minute), duree);
         calendar.ajouterEvent(e);
         System.out.println("Événement ajouté.");
@@ -215,39 +219,71 @@ public class Main {
             System.out.print("Participants : " + participants);
             participants += ", " + scanner.nextLine();
         }
-        Event e = FabriqueEvent.getEventReunion(titre2, gestionnaireConnexion.getUtilisateur().getNom(),
+        Event e = FabriqueEvent.getEventReunion(titre2, gestionnaireConnexion.getUtilisateur(),
                 LocalDateTime.of(annee2, moisRdv2, jourRdv2, heure2, minute2), duree2, lieu, participants);
         calendar.ajouterEvent(e);
 
         System.out.println("Événement ajouté.");
     }
     private void ajouterEvenementPeriodique(){
-        System.out.print("Titre de l'événement : ");
-        String titre3 = scanner.nextLine();
-        System.out.print("Année (AAAA) : ");
-        int annee3 = Integer.parseInt(scanner.nextLine());
-        System.out.print("Mois (1-12) : ");
-        int moisRdv3 = Integer.parseInt(scanner.nextLine());
-        System.out.print("Jour (1-31) : ");
-        int jourRdv3 = Integer.parseInt(scanner.nextLine());
-        System.out.print("Heure début (0-23) : ");
-        int heure3 = Integer.parseInt(scanner.nextLine());
-        System.out.print("Minute début (0-59) : ");
-        int minute3 = Integer.parseInt(scanner.nextLine());
-        System.out.print("Frequence (en jours) : ");
-        int frequence = Integer.parseInt(scanner.nextLine());
+        String titre3 = input.lireTexte("Titre de l'événement :");
+        int annee3 = input.lireEntier("Année (AAA) :");
+        int moisRdv3 = input.lireEntier("Mois (1-12) :");
+        int jourRdv3 = input.lireEntier("Jour (1-31) :");
+        int heure3 = input.lireEntier("Heure début (0-23) : ");
+        int minute3 =input.lireEntier("Minute début (0-59) : ");
+        int frequence = input.lireEntier("Frequence (en jours) : ");
 
-        Event e = FabriqueEvent.getEventPeriodique(titre3, gestionnaireConnexion.getUtilisateur().getNom(),
+        Event e = FabriqueEvent.getEventPeriodique(titre3, gestionnaireConnexion.getUtilisateur(),
                 LocalDateTime.of(annee3, moisRdv3, jourRdv3, heure3, minute3), 0, frequence);
         calendar.ajouterEvent(e);
         System.out.println("Événement ajouté.");
     }
 
+    private void ajouterSouscription() {
+        String titre = input.lireTexte("Titre de l'événement :");
+        int annee = input.lireEntier("Année (AAA) :");
+        int moisRdv = input.lireEntier("Mois (1-12) :");
+        int jourRdv = input.lireEntier("Jour (1-31) :");
+        int heure = input.lireEntier("Heure début (0-23) : ");
+        int minute =input.lireEntier("Minute début (0-59) : ");
+        int prix = input.lireEntier("Prix de la suscription : ");
+        String entreprise = input.lireTexte("Entreprise chez qui on s'abonne");
+        Event e = FabriqueEvent.getEventSouscription(titre,gestionnaireConnexion.getUtilisateur(), LocalDateTime.of(annee,moisRdv,jourRdv,heure,minute),0,prix,entreprise);
+        calendar.ajouterEvent(e);
+        System.out.println("Événement ajouté.");
+    }
 
     /**
      * Affiche le logo de l'application
      */
     private static void afficherLogo() {
+
+        System.out.println("████████████████████████████████████████████▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒████████████████████████████████████████");
+        System.out.println("▓▓▓▓▓▓▓▓▓▓████████████▓▓▓▓████████████▓▓▓▓▓▓██████████▓▓▓▓██▓▓██████████▓▓██▓▓████████████▓▓▓▓▓▓▓▓██████████▓▓▓▓▓▓");
+        System.out.println("████████████████████████████▓▓▓▓▓▓██████░░░░░░▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒██████▓▓▓▓▓▓▓▓████████▓▓██▓▓▓▓████████");
+        System.out.println("████████████████████████████▓▓▓▓▓▓██████░░░░░░▒▒▓▓▒▒▒▒▓▓▒▒▒▒▓▓▒▒▒▒▓▓▒▒▒▒▓▓▒▒██████▓▓▓▓▓▓██████████████▓▓██████████");
+        System.out.println("████████████████████████████▓▓▓▓▓▓██████░░░░░░▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒██████▓▓▓▓▓▓▓▓████████▓▓██▓▓██████████");
+        System.out.println("████████████████████████████████████████░░░░░░▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒██████████████████████████████████████");
+        System.out.println("▓▓▓▓▓▓▓▓▓▓████████████▓▓▓▓██████████████░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░██▓▓██████████▓▓▓▓▓▓▓▓██████████▓▓▓▓▓▓");
+        System.out.println("▓▓▓▓▓▓▓▓▓▓████████████▓▓▓▓██████████████░░░░░░                              ██▓▓██████████▓▓██▓▓▓▓██████████▓▓▓▓▓▓");
+        System.out.println("▓▓▓▓▓▓▓▓▓▓██████████▓▓▓▓▓▓██████████████░░░░░░        ▒▒▒▒      ▒▒▒▒        ████████████████▓▓▓▓▓▓██████████▓▓▓▓▓▓");
+        System.out.println("████████████████████████████████▓▓██████░░░░░░      ▒▒    ▒▒  ▒▒    ▒▒      ████████▓▓████████████████████████████");
+        System.out.println("████████████████████████████▓▓██████████░░░░░░  ░░  ░░    ▒▒  ▒▒    ▒▒      ████▓▓▓▓████▓▓████████▓▓██████████████");
+        System.out.println("██████████████████████████▓▓██▓▓████▓▓▓▓░░░░░░░░░░░░░░░░░░▒▒░░▒▒░░░░▒▒  ░░  ██████▓▓██▓▓▓▓████████████▓▓██████████");
+        System.out.println("██████████████████████████▓▓▓▓▓▓██████▓▓░░░░░░░░░░  ░░░░▒▒░░  ░░▒▒▒▒░░░░    ▓▓▓▓██▓▓██████████████████▓▓██████████");
+        System.out.println("██████████████████████████▓▓▓▓▓▓██████▓▓░░░░░░  ░░  ░░▒▒  ░░  ▒▒░░  ▒▒    ░░▓▓██▓▓▓▓██▓▓▓▓████████████████████████");
+        System.out.println("██████████████████████████████▓▓██▓▓████░░░░░░░░  ░░▒▒░░  ░░  ▒▒░░  ▒▒  ░░░░██▓▓██▓▓▓▓██▓▓████████████████████████");
+        System.out.println("████████████████████████████████████▓▓██░░░░░░      ▒▒        ▒▒    ▒▒      ██████████████▓▓██████████████████████");
+        System.out.println("████████████████████████████████████▓▓██░░░░░░      ▒▒▒▒▒▒▒▒    ▒▒▒▒        ██████████████▓▓██████████████████████");
+        System.out.println("▓▓██████▓▓██████████████████████████████░░░░░░                              ██▓▓████████████▓▓██▓▓████████████████");
+        System.out.println("████████████████████████████████████████░░░░░░                              ██████████████████████████████████████");
+        System.out.println("████████████████████████████▓▓▓▓▓▓██████░░░░░░                              ████████▓▓▓▓██████████████▓▓██████████");
+        System.out.println("████████████████████████████▓▓▓▓▓▓██████░░░░░░          ▒▒▒▒▒▒▒▒▒▒          ████████▓▓▓▓██████████████▓▓██████████");
+        System.out.println("██████████████████████████████▓▓▓▓██████░░░░░░                              ████████▓▓▓▓██████████████▓▓██████████");
+        System.out.println("██████████████████████████████▓▓▓▓██████░░░░░░                              ████████▓▓▓▓██████████████▓▓██████████");
+        System.out.println("▓▓▓▓▓▓▓▓▓▓████████████▓▓▓▓████████████▓▓▓▓██▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓████████████▓▓██▓▓▓▓████████████▓▓▓▓");System.out.println("██████████████████████████████████████▓▓██████████████▓▓██▓▓▓▓████████████████████████████▓▓▓▓██▓▓████████████████");
+
         System.out.println("  _____         _                   _                __  __");
         System.out.println(" / ____|       | |                 | |              |  \\/  |");
         System.out.println(

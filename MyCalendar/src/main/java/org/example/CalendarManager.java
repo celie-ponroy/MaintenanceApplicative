@@ -1,7 +1,6 @@
 package org.example;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.TreeSet;
@@ -24,7 +23,7 @@ public class CalendarManager {
 
     public List<Event> eventsDansPeriode(LocalDateTime debut, LocalDateTime fin) {
         return events.stream()
-                .filter(e -> e.isInPeriod(debut, fin)) // Utilise un prédicat pour filtrer
+                .filter(e -> e.isInPeriod(debut, fin))
                 .collect(Collectors.toList());
     }
 

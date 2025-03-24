@@ -4,15 +4,16 @@ import java.time.LocalDateTime;
 
 public abstract class Event {
     protected EventType type;
-    protected String title;
-    protected String proprietaire;
+    protected final String title;
+    //protected final String proprietaire;
+    protected final Utilisateur proprietaire;
     protected LocalDateTime dateDebut;
-    protected int dureeMinutes;
+    protected final int dureeMinutes;
 
-    public Event(EventType type, String title, String proprietaire, LocalDateTime dateDebut, int dureeMinutes) {
+    public Event(EventType type, String title, Utilisateur proprietaire, LocalDateTime dateDebut, int dureeMinutes) {
         this.type = type;
         this.title = title;
-        if(proprietaire==null||proprietaire.isEmpty()) {
+        if(proprietaire==null) {
             throw new IllegalArgumentException("Proprietaire non valide");
         }
         this.proprietaire = proprietaire;
@@ -52,7 +53,7 @@ public abstract class Event {
         return dateDebut;
     }
 
-    public String getProprietaire() {
+    public Utilisateur getProprietaire() {
         return proprietaire;
     }
 

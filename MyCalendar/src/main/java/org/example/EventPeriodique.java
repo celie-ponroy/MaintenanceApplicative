@@ -3,9 +3,9 @@ package org.example;
 import java.time.LocalDateTime;
 
 public class EventPeriodique extends Event {
-    protected int frequenceJours;
+    protected final int frequenceJours;
 
-    public EventPeriodique(  String title, String proprietaire, LocalDateTime dateDebut, int dureeMinutes, int frequenceJours) {
+    public EventPeriodique(  String title, Utilisateur proprietaire, LocalDateTime dateDebut, int dureeMinutes, int frequenceJours) {
         super(EventType.PERIODIQUE, title, proprietaire, dateDebut, dureeMinutes);
         //verificaiton frequence
         if(frequenceJours < 0) {
@@ -24,9 +24,9 @@ public class EventPeriodique extends Event {
         LocalDateTime occurrence = this.dateDebut;
         while (!occurrence.isAfter(fin)) {
             if (!occurrence.isBefore(debut)) {
-                return true;  // Si l'occurrence est dans la période
+                return true;
             }
-            occurrence = occurrence.plusDays(frequenceJours);  // Passage à la prochaine occurrence
+            occurrence = occurrence.plusDays(frequenceJours);
         }
         return false;
     }

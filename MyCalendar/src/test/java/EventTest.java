@@ -1,4 +1,5 @@
 import org.example.*;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
@@ -7,10 +8,16 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 public class EventTest {
+    Utilisateur utilisateur;
+    @BeforeEach
+    public void init() {
+        utilisateur = new Utilisateur("moi","mdp");
+    }
+
     //------------Rdv perso----------------
     @Test
     public void RdvpersoClassic(){
-        Event e = FabriqueEvent.getEventRDV("RDV", "moi", LocalDateTime.of(2026, 1, 1, 12, 0), 60);
+        Event e = FabriqueEvent.getEventRDV("RDV", utilisateur, LocalDateTime.of(2026, 1, 1, 12, 0), 60);
         assertEquals(EventType.RDV_PERSONNEL, e.getType());
         assertEquals("RDV", e.getTitle());
         assertEquals("moi", e.getProprietaire());
@@ -24,19 +31,19 @@ public class EventTest {
     }
     @Test
     public void RdvpersoNullDate(){
-        Event e = FabriqueEvent.getEventRDV("RDV", "moi", null, 60);
+        Event e = FabriqueEvent.getEventRDV("RDV", utilisateur, null, 60);
         assertNull(e);
     }
     @Test
     public void RdvpersoDatePassée(){
-        Event e = FabriqueEvent.getEventRDV("RDV", "moi", LocalDateTime.of(2020, 1, 1, 12, 0), 60);
+        Event e = FabriqueEvent.getEventRDV("RDV", utilisateur, LocalDateTime.of(2020, 1, 1, 12, 0), 60);
         assertNull(e);
     }
 
     //------------RDV Periodique----------------
     @Test
     public void RDVPeriodiqueClassic(){
-        EventPeriodique e = (EventPeriodique) FabriqueEvent.getEventPeriodique("RDV", "moi", LocalDateTime.of(2026, 1, 1, 12, 0), 60, 7);
+        EventPeriodique e = (EventPeriodique) FabriqueEvent.getEventPeriodique("RDV", utilisateur, LocalDateTime.of(2026, 1, 1, 12, 0), 60, 7);
         assertEquals(EventType.PERIODIQUE, e.getType());
         assertEquals("RDV", e.getTitle());
         assertEquals("moi", e.getProprietaire());
@@ -51,28 +58,28 @@ public class EventTest {
     }
     @Test
     public void RDVPeriodiqueNullDate(){
-        Event e = FabriqueEvent.getEventPeriodique("RDV", "moi", null, 60, 7);
+        Event e = FabriqueEvent.getEventPeriodique("RDV", utilisateur, null, 60, 7);
         assertNull(e);
     }
     @Test
     public void RDVPeriodiqueDatePassée(){
-        Event e = FabriqueEvent.getEventPeriodique("RDV", "moi", LocalDateTime.of(2020, 1, 1, 12, 0), 60, 7);
+        Event e = FabriqueEvent.getEventPeriodique("RDV", utilisateur, LocalDateTime.of(2020, 1, 1, 12, 0), 60, 7);
         assertNull(e);
     }
     @Test
     public void RDVPeriodiqueFrequenceNegative(){
-        Event e = FabriqueEvent.getEventPeriodique("RDV", "moi", LocalDateTime.of(2021, 1, 1, 12, 0), 60, -7);
+        Event e = FabriqueEvent.getEventPeriodique("RDV", utilisateur, LocalDateTime.of(2021, 1, 1, 12, 0), 60, -7);
         assertNull(e);
     }
     @Test
     public void RDVPeriodiqueFrequenceNulle(){
-        Event e = FabriqueEvent.getEventPeriodique("RDV", "moi", LocalDateTime.of(2021, 1, 1, 12, 0), 60, 0);
+        Event e = FabriqueEvent.getEventPeriodique("RDV", utilisateur, LocalDateTime.of(2021, 1, 1, 12, 0), 60, 0);
         assertNull(e);
     }
     //----------------Reunion----------------
     @Test
     public void ReunionClassic(){
-        EventReunion e = (EventReunion) FabriqueEvent.getEventReunion("Reunion", "moi", LocalDateTime.of(2026, 1, 1, 12, 0), 60, "ici", "moi");
+        EventReunion e = (EventReunion) FabriqueEvent.getEventReunion("Reunion", utilisateur, LocalDateTime.of(2026, 1, 1, 12, 0), 60, "ici", "moi");
         assertEquals(EventType.REUNION, e.getType());
         assertEquals("Reunion", e.getTitle());
         assertEquals("moi", e.getProprietaire());
@@ -88,39 +95,39 @@ public class EventTest {
     }
     @Test
     public void ReunionNullDate(){
-        Event e = FabriqueEvent.getEventReunion("Reunion", "moi", null, 60, "ici", "moi");
+        Event e = FabriqueEvent.getEventReunion("Reunion", utilisateur, null, 60, "ici", "moi");
         assertNull(e);
     }
     @Test
     public void ReunionDatePassée(){
-        Event e = FabriqueEvent.getEventReunion("Reunion", "moi", LocalDateTime.of(2020, 1, 1, 12, 0), 60, "ici", "moi");
+        Event e = FabriqueEvent.getEventReunion("Reunion", utilisateur, LocalDateTime.of(2020, 1, 1, 12, 0), 60, "ici", "moi");
         assertNull(e);
     }
     @Test
     public void ReunionNullLieu(){
-        Event e = FabriqueEvent.getEventReunion("Reunion", "moi", LocalDateTime.of(2021, 1, 1, 12, 0), 60, null, "moi");
+        Event e = FabriqueEvent.getEventReunion("Reunion", utilisateur, LocalDateTime.of(2021, 1, 1, 12, 0), 60, null, "moi");
         assertNull(e);
     }
     @Test
     public void ReunionLieuVide(){
-        Event e = FabriqueEvent.getEventReunion("Reunion", "moi", LocalDateTime.of(2021, 1, 1, 12, 0), 60, "", "moi");
+        Event e = FabriqueEvent.getEventReunion("Reunion", utilisateur, LocalDateTime.of(2021, 1, 1, 12, 0), 60, "", "moi");
         assertNull(e);
     }
     @Test
     public void ReunionNullParticipants(){
-        Event e = FabriqueEvent.getEventReunion("Reunion", "moi", LocalDateTime.of(2021, 1, 1, 12, 0), 60, "ici", null);
+        Event e = FabriqueEvent.getEventReunion("Reunion", utilisateur, LocalDateTime.of(2021, 1, 1, 12, 0), 60, "ici", null);
         assertNull(e);
     }
     @Test
     public void ReunionParticipantsVide(){
-        Event e = FabriqueEvent.getEventReunion("Reunion", "moi", LocalDateTime.of(2021, 1, 1, 12, 0), 60, "ici", "");
+        Event e = FabriqueEvent.getEventReunion("Reunion", utilisateur, LocalDateTime.of(2021, 1, 1, 12, 0), 60, "ici", "");
         assertNull(e);
     }
 
     //------------Rdv souscription----------------
    @Test
     public void SouscriptionClassic(){
-        Event e = FabriqueEvent.getEventSouscription("Souscription", "moi", LocalDateTime.of(2026, 1, 1, 12, 0), 60, 12.0,"Free");
+        Event e = FabriqueEvent.getEventSouscription("Souscription", utilisateur, LocalDateTime.of(2026, 1, 1, 12, 0), 60, 12.0,"Free");
         assertEquals(EventType.SOUSCRIPTION, e.getType());
         assertEquals("Souscription", e.getTitle());
         assertEquals("moi", e.getProprietaire());
@@ -136,18 +143,18 @@ public class EventTest {
     }
     @Test
     public void SouscriptionNullDate(){
-        Event e = FabriqueEvent.getEventSouscription("Souscription", "moi", null, 60, 12.0,"Free");
+        Event e = FabriqueEvent.getEventSouscription("Souscription", utilisateur, null, 60, 12.0,"Free");
         assertNull(e);
     }
     @Test
     public void SouscriptionNullEntreprise(){
-        EventSouscription e = FabriqueEvent.getEventSouscription("Souscription", "moi", LocalDateTime.of(2026, 1, 1, 12, 0), 60, 12.0,null);
+        EventSouscription e = FabriqueEvent.getEventSouscription("Souscription", utilisateur, LocalDateTime.of(2026, 1, 1, 12, 0), 60, 12.0,null);
         assertEquals("Inconnue",e.getEntreprise());
 
     }
     @Test
     public void SouscriptionVideEntreprise(){
-        EventSouscription e = FabriqueEvent.getEventSouscription("Souscription", "moi", LocalDateTime.of(2026, 1, 1, 12, 0), 60, 12.0,"");
+        EventSouscription e = FabriqueEvent.getEventSouscription("Souscription", utilisateur, LocalDateTime.of(2026, 1, 1, 12, 0), 60, 12.0,"");
         assertEquals("Inconnue",e.getEntreprise());
 
     }

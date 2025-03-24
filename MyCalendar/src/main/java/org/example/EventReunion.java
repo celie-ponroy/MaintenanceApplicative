@@ -3,11 +3,11 @@ package org.example;
 import java.time.LocalDateTime;
 
 public class EventReunion extends Event {
-    public String lieu; // utilisé seulement pour REUNION
+    public final String lieu;
     public String participants;
 
 
-    public EventReunion( String title, String proprietaire, LocalDateTime dateDebut, int dureeMinutes, String lieu, String participants) {
+    public EventReunion( String title, Utilisateur proprietaire, LocalDateTime dateDebut, int dureeMinutes, String lieu, String participants) {
         super(EventType.REUNION, title, proprietaire, dateDebut, dureeMinutes);
         if(lieu == null || lieu.isEmpty()) {
             throw new IllegalArgumentException("Le lieu ne peut pas être vide");
