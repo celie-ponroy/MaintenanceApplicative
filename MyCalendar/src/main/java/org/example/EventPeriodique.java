@@ -23,13 +23,16 @@ public class EventPeriodique extends Event {
     public boolean isInPeriod(LocalDateTime debut, LocalDateTime fin) {
         LocalDateTime occurrence = this.dateDebut;
         while (!occurrence.isAfter(fin)) {
-            if (!occurrence.isBefore(debut)) {
-                return true;
+            LocalDateTime finOccurrence = occurrence.plusMinutes(this.getDureeMinutes());
+
+            if (occurrence.isBefore(fin) && finOccurrence.isAfter(debut)) {
+                return true; // conflit
             }
             occurrence = occurrence.plusDays(frequenceJours);
         }
-        return false;
+        return false;//sans conflit
     }
+
 
     public int getFrequenceJours() {
         return frequenceJours;

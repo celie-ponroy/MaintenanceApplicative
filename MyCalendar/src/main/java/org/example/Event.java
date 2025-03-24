@@ -33,7 +33,7 @@ public abstract class Event {
     public abstract String description();
 
     /**
-     * renvoi faux si la date en paramettre rentre en conflit avec la date de this
+     * renvoi faux si la date en paramettre rentre pas en conflit avec la date de this
      * @param debut
      * @param fin
      * @return
