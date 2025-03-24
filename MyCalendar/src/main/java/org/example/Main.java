@@ -84,6 +84,7 @@ public class Main {
                 "Ajouter une réunion",
                 "Ajouter un évènement périodique",
                 "Ajouter une souscription",
+                "Supprimer un évènement",
                 "Se déconnecter"
         );
 
@@ -93,6 +94,7 @@ public class Main {
                 this::ajouterReunion,
                 this::ajouterEvenementPeriodique,
                 this::ajouterSouscription,
+                this::supprimerEvent,
                 this::deconnexion
         );
         menu.afficherMenu("Menu Gestionnaire d'Événements", options, actions);
@@ -100,8 +102,7 @@ public class Main {
     }
 
     private void deconnexion() {
-        System.out.println("Déconnexion ! Voulez-vous continuer ? (O/N)");
-        continuer = scanner.nextLine().trim().contains("O");
+        continuer = input.lireConfirmation("Déconnexion ! Voulez-vous continuer ?");
         gestionnaireConnexion.deconnexion();
     }
     private void afficherEvenements(){
@@ -253,7 +254,10 @@ public class Main {
         calendar.ajouterEvent(e);
         System.out.println("Événement ajouté.");
     }
-
+    public void supprimerEvent(){
+        String ID = input.lireTexte("ID de l'évènement : ");
+        calendar.supprimerEventParId(ID);
+    }
     /**
      * Affiche le logo de l'application
      */

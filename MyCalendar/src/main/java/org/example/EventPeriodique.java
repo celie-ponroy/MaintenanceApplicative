@@ -1,5 +1,7 @@
 package org.example;
 
+import com.sun.java.accessibility.util.EventID;
+
 import java.time.LocalDateTime;
 
 public class EventPeriodique extends Event {
@@ -16,7 +18,7 @@ public class EventPeriodique extends Event {
 
     @Override
     public String description() {
-        return "Événement périodique : " + title + " tous les " + frequenceJours + " jours";
+        return "Événement périodique : " + title + " tous les " + frequenceJours + " jours "+" (id: "+ eventId+ ")";
 
     }
     @Override

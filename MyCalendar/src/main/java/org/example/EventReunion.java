@@ -21,7 +21,7 @@ public class EventReunion extends Event {
 
     @Override
     public String description() {
-        return "Réunion : " + title + " à " + lieu + " avec " + participants;
+        return "Réunion : " + title + " à " + lieu + " avec " + participants+" (id: "+ eventId+ ")";
     }
     @Override
     public boolean isInPeriod(LocalDateTime debut, LocalDateTime fin) {

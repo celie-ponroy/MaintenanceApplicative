@@ -10,7 +10,7 @@ public class EventRDVPersonnel extends Event{
 
     @Override
     public String description() {
-        return "RDV : " + title + " à " + dateDebut.toString();
+        return "RDV : " + title + " à " + dateDebut.toString()+" (id: "+ eventId+ ")";
     }
     @Override
     public boolean isInPeriod(LocalDateTime debut, LocalDateTime fin) {

@@ -52,4 +52,14 @@ public class CalendarManager {
     public TreeSet<Event> getEvents() {
         return events;
     }
+
+    /**
+     * permets de supprimer un event par l'id
+     * @param eventId
+     * @return
+     */
+    public boolean supprimerEventParId(String eventId) {
+        return events.removeIf(e -> e.getEventId().equals(eventId));
+    }
+
 }

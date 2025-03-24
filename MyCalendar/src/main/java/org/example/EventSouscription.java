@@ -31,6 +31,6 @@ public class EventSouscription extends EventPeriodique{
 
     @Override
     public String description() {
-        return "Souscription chez : " + entreprise + " de " + prix;
+        return "Souscription chez : " + entreprise + " de " + prix+" (id: "+ eventId+ ")";
     }
 }

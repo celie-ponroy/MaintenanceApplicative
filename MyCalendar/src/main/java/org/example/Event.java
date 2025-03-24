@@ -1,11 +1,12 @@
 package org.example;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 public abstract class Event {
     protected EventType type;
     protected final String title;
-    //protected final String proprietaire;
+    protected final String eventId;
     protected final Utilisateur proprietaire;
     protected LocalDateTime dateDebut;
     protected final int dureeMinutes;
@@ -27,7 +28,7 @@ public abstract class Event {
             throw new IllegalArgumentException("La durée doit être positive");
         }
         this.dureeMinutes = dureeMinutes;
-
+        eventId = UUID.randomUUID().toString();
     }
 
     public abstract String description();
@@ -59,5 +60,9 @@ public abstract class Event {
 
     public String getTitle() {
         return title;
+    }
+
+    public String getEventId() {
+        return eventId;
     }
 }
