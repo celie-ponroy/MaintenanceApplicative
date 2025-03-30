@@ -5,7 +5,9 @@ import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -82,46 +84,48 @@ public class EventTest {
     //----------------Reunion----------------
     @Test
     public void ReunionClassic(){
-        EventReunion e = (EventReunion) FabriqueEvent.getEventReunion("Reunion", utilisateur, LocalDateTime.of(2026, 1, 1, 12, 0), 60, "ici", List.of(new Utilisateur("moi","12")));
+        EventReunion e = FabriqueEvent.getEventReunion("Reunion", utilisateur,
+                LocalDateTime.of(2026, 1, 1, 12, 0),
+                60, "ici", Set.of(new Utilisateur("moi","12")));
         assertEquals(EventType.REUNION, e.getType());
         assertEquals(new TitreEvent("Reunion"), e.getTitle());
         assertEquals(utilisateur, e.getProprietaire());
         assertEquals(LocalDateTime.of(2026, 1, 1, 12, 0), e.getDateDebut());
         assertEquals(new DureeEvent(60), e.getDureeMinutes());
         assertEquals("ici", e.lieu);
-        assertEquals(List.of(new Utilisateur("moi","12")), e.participants);
+        assertEquals(Set.of(new Utilisateur("moi","12")), e.getParticipants());
     }
     @Test
     public void ReunionNullProprio(){
         Event e = FabriqueEvent.getEventReunion("Reunion", null, LocalDateTime.of(2021, 1, 1, 12, 0),
-                60, "ici", List.of(new Utilisateur("moi","12")));
+                60, "ici", Set.of(new Utilisateur("moi","12")));
         assertNull(e);
     }
     @Test
     public void ReunionNullDate(){
         Event e = FabriqueEvent.getEventReunion("Reunion", utilisateur, null, 60, "ici",
-                List.of(new Utilisateur("moi","12")));
+                Set.of(new Utilisateur("moi","12")));
         assertNull(e);
     }
     @Test
     public void ReunionDatePassée(){
         Event e = FabriqueEvent.getEventReunion("Reunion", utilisateur,
                 LocalDateTime.of(2020, 1, 1, 12, 0),
-                60, "ici", List.of(new Utilisateur("moi","12")));
+                60, "ici", Set.of(new Utilisateur("moi","12")));
         assertNull(e);
     }
     @Test
     public void ReunionNullLieu(){
         Event e = FabriqueEvent.getEventReunion("Reunion", utilisateur,
                 LocalDateTime.of(2021, 1, 1, 12, 0),
-                60, null, List.of(new Utilisateur("moi","12")));
+                60, null, Set.of(new Utilisateur("moi","12")));
         assertNull(e);
     }
     @Test
     public void ReunionLieuVide(){
         Event e = FabriqueEvent.getEventReunion("Reunion", utilisateur,
                 LocalDateTime.of(2021, 1, 1, 12, 0),
-                60, "", List.of(new Utilisateur("moi","12")));
+                60, "", Set.of(new Utilisateur("moi","12")));
         assertNull(e);
     }
     @Test
@@ -132,7 +136,7 @@ public class EventTest {
     @Test
     public void ReunionParticipantsVide(){
         Event e = FabriqueEvent.getEventReunion("Reunion", utilisateur, LocalDateTime.of(2021, 1, 1, 12, 0),
-                60, "ici", new ArrayList<>());
+                60, "ici", new HashSet<>());
         assertNull(e);
     }
 
