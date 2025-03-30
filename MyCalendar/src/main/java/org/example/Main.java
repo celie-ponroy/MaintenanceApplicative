@@ -129,12 +129,9 @@ public class Main {
     }
 
     private void afficherEvenementsJour() {
-        System.out.print("Entrez l'année (AAAA) : ");
-        int anneeJour = Integer.parseInt(scanner.nextLine());
-        System.out.print("Entrez le mois (1-12) : ");
-        int moisJour = Integer.parseInt(scanner.nextLine());
-        System.out.print("Entrez le jour (1-31) : ");
-        int jour = Integer.parseInt(scanner.nextLine());
+        int anneeJour =input.lireEntier("Entrez l'année (AAAA) : ");
+        int moisJour = input.lireEntier("Entrez le mois (1-12) : ");
+        int jour =  input.lireEntier("Entrez le jour (1-31) : ");
 
         LocalDateTime debutJour = LocalDateTime.of(anneeJour, moisJour, jour, 0, 0);
         LocalDateTime finJour = debutJour.plusDays(1).minusSeconds(1);
@@ -143,10 +140,8 @@ public class Main {
     }
 
     private void afficherEvenementsSemaine() {
-        System.out.print("Entrez l'année (AAAA) : ");
-        int anneeSemaine = Integer.parseInt(scanner.nextLine());
-        System.out.print("Entrez le numéro de semaine (1-52) : ");
-        int semaine = Integer.parseInt(scanner.nextLine());
+        int anneeSemaine = input.lireEntier("Entrez l'année (AAAA) : ");
+        int semaine = input.lireEntier("Entrez le numéro de semaine (1-52) : ");
 
         LocalDateTime debutSemaine = LocalDateTime.now()
                 .withYear(anneeSemaine)
@@ -159,12 +154,8 @@ public class Main {
     }
 
     private void afficherEvenementsMois() {
-
-        System.out.print("Entrez l'année (AAAA) : ");
-        int anneeMois = Integer.parseInt(scanner.nextLine());
-        System.out.print("Entrez le mois (1-12) : ");
-        int mois = Integer.parseInt(scanner.nextLine());
-
+        int anneeMois = input.lireEntier("Entrez l'année (AAAA) : ");
+        int mois = input.lireEntier("Entrez le mois (1-12) : ");
         LocalDateTime debutMois = LocalDateTime.of(anneeMois, mois, 1, 0, 0);
         LocalDateTime finMois = debutMois.plusMonths(1).minusSeconds(1);
 
@@ -178,42 +169,19 @@ public class Main {
     //--------------------------------------Ajout des événements--------------------------------------
     private void ajouterRdvPerso(){
         // Ajout simplifié d'un RDV personnel
-        System.out.print("Titre de l'événement : ");
-        String titre = scanner.nextLine();
-        System.out.print("Année (AAAA) : ");
-        int annee = Integer.parseInt(scanner.nextLine());
-        System.out.print("Mois (1-12) : ");
-        int moisRdv = Integer.parseInt(scanner.nextLine());
-        System.out.print("Jour (1-31) : ");
-        int jourRdv = Integer.parseInt(scanner.nextLine());
-        System.out.print("Heure début (0-23) : ");
-        int heure = Integer.parseInt(scanner.nextLine());
-        System.out.print("Minute début (0-59) : ");
-        int minute = Integer.parseInt(scanner.nextLine());
-        System.out.print("Durée (en minutes) : ");
-        int duree = Integer.parseInt(scanner.nextLine());
+        String titre = input.lireTexte("Titre de l'événement : ");
+        LocalDateTime debutRdvPerso = input.saisirDateHeure();
+        int duree = input.lireEntier("Durée (en minutes) : ");
         Event e = FabriqueEvent.getEventRDV(titre, gestionnaireConnexion.getUtilisateur(),
-                LocalDateTime.of(annee, moisRdv, jourRdv, heure, minute), duree);
+                debutRdvPerso, duree);
         calendar.ajouterEvent(e);
         System.out.println("Événement ajouté.");
     }
     private void ajouterReunion(){
-        System.out.print("Titre de l'événement : ");
-        String titre2 = scanner.nextLine();
-        System.out.print("Année (AAAA) : ");
-        int annee2 = Integer.parseInt(scanner.nextLine());
-        System.out.print("Mois (1-12) : ");
-        int moisRdv2 = Integer.parseInt(scanner.nextLine());
-        System.out.print("Jour (1-31) : ");
-        int jourRdv2 = Integer.parseInt(scanner.nextLine());
-        System.out.print("Heure début (0-23) : ");
-        int heure2 = Integer.parseInt(scanner.nextLine());
-        System.out.print("Minute début (0-59) : ");
-        int minute2 = Integer.parseInt(scanner.nextLine());
-        System.out.print("Durée (en minutes) : ");
-        int duree2 = Integer.parseInt(scanner.nextLine());
-        System.out.println("Lieu :");
-        String lieu = scanner.nextLine();
+        String titre2 = input.lireTexte("Titre de l'événement : ");
+        LocalDateTime debutReunion = input.saisirDateHeure();
+        int duree = input.lireEntier("Durée (en minutes) : ");
+        String lieu = input.lireTexte("Lieu :");
 
         String participants = gestionnaireConnexion.getUtilisateur().getNom();
 
@@ -224,36 +192,28 @@ public class Main {
             participants += ", " + scanner.nextLine();
         }
         Event e = FabriqueEvent.getEventReunion(titre2, gestionnaireConnexion.getUtilisateur(),
-                LocalDateTime.of(annee2, moisRdv2, jourRdv2, heure2, minute2), duree2, lieu, participants);
+                debutReunion, duree, lieu, participants);
         calendar.ajouterEvent(e);
 
         System.out.println("Événement ajouté.");
     }
     private void ajouterEvenementPeriodique(){
         String titre3 = input.lireTexte("Titre de l'événement :");
-        int annee3 = input.lireEntier("Année (AAA) :");
-        int moisRdv3 = input.lireEntier("Mois (1-12) :");
-        int jourRdv3 = input.lireEntier("Jour (1-31) :");
-        int heure3 = input.lireEntier("Heure début (0-23) : ");
-        int minute3 =input.lireEntier("Minute début (0-59) : ");
+        LocalDateTime debutEvenementPeriodique = input.saisirDateHeure();
         int frequence = input.lireEntier("Frequence (en jours) : ");
 
         Event e = FabriqueEvent.getEventPeriodique(titre3, gestionnaireConnexion.getUtilisateur(),
-                LocalDateTime.of(annee3, moisRdv3, jourRdv3, heure3, minute3), 0, frequence);
+                debutEvenementPeriodique, 0, frequence);
         calendar.ajouterEvent(e);
         System.out.println("Événement ajouté.");
     }
 
     private void ajouterSouscription() {
         String titre = input.lireTexte("Titre de l'événement :");
-        int annee = input.lireEntier("Année (AAA) :");
-        int moisRdv = input.lireEntier("Mois (1-12) :");
-        int jourRdv = input.lireEntier("Jour (1-31) :");
-        int heure = input.lireEntier("Heure début (0-23) : ");
-        int minute =input.lireEntier("Minute début (0-59) : ");
+        LocalDateTime debutSouscription = input.saisirDateHeure();
         int prix = input.lireEntier("Prix de la suscription : ");
         String entreprise = input.lireTexte("Entreprise chez qui on s'abonne");
-        Event e = FabriqueEvent.getEventSouscription(titre,gestionnaireConnexion.getUtilisateur(), LocalDateTime.of(annee,moisRdv,jourRdv,heure,minute),0,prix,entreprise);
+        Event e = FabriqueEvent.getEventSouscription(titre,gestionnaireConnexion.getUtilisateur(),debutSouscription,0,prix,entreprise);
         calendar.ajouterEvent(e);
         System.out.println("Événement ajouté.");
     }
