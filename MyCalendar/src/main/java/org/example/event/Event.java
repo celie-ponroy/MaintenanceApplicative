@@ -14,6 +14,14 @@ public abstract class Event {
     protected LocalDateTime dateDebut;
     protected final DureeEvent dureeMinutes;
 
+    /**
+     * Constructeur
+     * @param type
+     * @param title
+     * @param proprietaire
+     * @param dateDebut
+     * @param dureeMinutes
+     */
     public Event(EventType type, TitreEvent title, Utilisateur proprietaire, LocalDateTime dateDebut, DureeEvent dureeMinutes) {
         this.type = type;
         this.title = title;
@@ -30,6 +38,10 @@ public abstract class Event {
         eventId = UUID.randomUUID().toString();
     }
 
+    /**
+     * Affiche une desciption selon son type
+     * @return
+     */
     public abstract String description();
 
     /**

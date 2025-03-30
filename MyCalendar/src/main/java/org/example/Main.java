@@ -7,12 +7,15 @@ import java.time.LocalDateTime;
 import java.time.temporal.WeekFields;
 import java.util.*;
 
+/**
+ * Permets de lancer l'application
+ */
 public class Main {
-    CalendarManager calendar = new CalendarManager();
+    CalendarManager calendar = new CalendarManager(); //gestion de evenements
     Scanner scanner = new Scanner(System.in);
-    GestionnaireConnexion gestionnaireConnexion = new GestionnaireConnexion();
-    Menu menu = new Menu(scanner);
-    InputMain input = new InputMain(scanner);
+    GestionnaireConnexion gestionnaireConnexion = new GestionnaireConnexion();//gestion des connexions
+    Menu menu = new Menu(scanner);//gestion du menu de l'application
+    InputMain input = new InputMain(scanner); // permets de centraliser les inputs
     boolean continuer = true;
 
     public static void main(String[] args) {
@@ -55,6 +58,9 @@ public class Main {
         gestionnaireConnexion.connexion(nomUtilisateur,motDePasse);
     }
 
+    /**
+     * Permets de s'inscrire dans les utilisateurs
+     */
     public void menuInscription(){
         System.out.print("Nom d'utilisateur: ");
         scanner.nextLine();
@@ -66,6 +72,10 @@ public class Main {
         gestionnaireConnexion.inscription(nomUtilisateur,motDePasse,secondMotDePasse);
     }
 
+    /**
+     * Affiche la liste d'évènements de l'utilisateur
+     * @param evenements
+     */
     private static void afficherListe(List<Event> evenements) {
         evenements.stream()
                 .map(Event::description)
@@ -104,10 +114,18 @@ public class Main {
 
     }
 
+    /**
+     * Permets à un utilisateur de se déconnecter
+     */
     private void deconnexion() {
         continuer = input.lireConfirmation("Déconnexion ! Voulez-vous continuer ?");
         gestionnaireConnexion.deconnexion();
     }
+    //--------------------------------------Affichage des événements--------------------------------------
+
+    /**
+     * Menu d'affichage des évènements
+     */
     private void afficherEvenements(){
         List<String> options = List.of(
                 "Afficher TOUS les événements",
@@ -127,7 +145,9 @@ public class Main {
         menu.afficherMenu("Menu de visualisation d'Événements", options, actions);
 
     }
-
+    /**
+     * affiche les évènements d'un jour précis
+     */
     private void afficherEvenementsJour() {
         int anneeJour =input.lireEntier("Entrez l'année (AAAA) : ");
         int moisJour = input.lireEntier("Entrez le mois (1-12) : ");
@@ -138,7 +158,9 @@ public class Main {
 
         afficherListe(calendar.eventsDansPeriode(debutJour, finJour));
     }
-
+    /**
+     * affiche les évènements d'une semaine précise
+     */
     private void afficherEvenementsSemaine() {
         int anneeSemaine = input.lireEntier("Entrez l'année (AAAA) : ");
         int semaine = input.lireEntier("Entrez le numéro de semaine (1-52) : ");
@@ -153,6 +175,9 @@ public class Main {
         afficherListe(calendar.eventsDansPeriode(debutSemaine, finSemaine));
     }
 
+    /**
+     * affiche les évènements d'un mois précis
+     */
     private void afficherEvenementsMois() {
         int anneeMois = input.lireEntier("Entrez l'année (AAAA) : ");
         int mois = input.lireEntier("Entrez le mois (1-12) : ");
@@ -162,11 +187,17 @@ public class Main {
         afficherListe(calendar.eventsDansPeriode(debutMois, finMois));
     }
 
+    /**
+     * affiche tous les évènements
+     */
     private void afficherTousEvenements() {
         calendar.afficherEvenements();
     }
 
     //--------------------------------------Ajout des événements--------------------------------------
+    /**
+     * Permets d'ajouter un évènement Rendez vous perso
+     */
     private void ajouterRdvPerso(){
         // Ajout simplifié d'un RDV personnel
         String titre = input.lireTexte("Titre de l'événement : ");
@@ -177,47 +208,26 @@ public class Main {
         calendar.ajouterEvent(e);
         System.out.println("Événement ajouté.");
     }
+    /**
+     * Permets d'ajouter un évènement Réunion
+     */
     private void ajouterReunion(){
         String titre2 = input.lireTexte("Titre de l'événement : ");
         LocalDateTime debutReunion = input.saisirDateHeure();
         int duree = input.lireEntier("Durée (en minutes) : ");
         String lieu = input.lireTexte("Lieu :");
 
-        Set<Utilisateur> participants  = new HashSet<>();
-        boolean ajouterPlus = true;
+        Set<Utilisateur> participants  = input.ajouterParticipants();
 
-        while (ajouterPlus) {
-            System.out.print("Rechercher un utilisateur (nom) : ");
-            String recherche = scanner.nextLine();
-            List<Utilisateur> resultats = gestionnaireConnexion.rechercherUtilisateurs(recherche);
-
-            if (resultats.isEmpty()) {
-                System.out.println("Aucun utilisateur trouvé.");
-            } else {
-                System.out.println("Sélectionnez un utilisateur (ID) : ");
-                for (int i = 0; i < resultats.size(); i++) {
-                    System.out.println((i + 1) + " - " + resultats.get(i).getNom());
-                }
-
-                int choix = scanner.nextInt();
-                scanner.nextLine(); // Pour éviter le bug de saut de ligne
-
-                if (choix > 0 && choix <= resultats.size()) {
-                    participants.add(resultats.get(choix - 1));
-                } else {
-                    System.out.println("Choix invalide.");
-                }
-            }
-
-            System.out.print("Ajouter un autre participant ? (oui / non) : ");
-            ajouterPlus = scanner.nextLine().equalsIgnoreCase("oui");
-        }
         Event e = FabriqueEvent.getEventReunion(titre2, gestionnaireConnexion.getUtilisateur(),
                 debutReunion, duree, lieu, participants);
         calendar.ajouterEvent(e);
 
         System.out.println("Événement ajouté.");
     }
+    /**
+     * Permets d'ajouter un évènement periodique
+     */
     private void ajouterEvenementPeriodique(){
         String titre3 = input.lireTexte("Titre de l'événement :");
         LocalDateTime debutEvenementPeriodique = input.saisirDateHeure();
@@ -229,6 +239,9 @@ public class Main {
         System.out.println("Événement ajouté.");
     }
 
+    /**
+     * Permets d'ajouter un évènement "Souscription"
+     */
     private void ajouterSouscription() {
         String titre = input.lireTexte("Titre de l'événement :");
         LocalDateTime debutSouscription = input.saisirDateHeure();
@@ -238,6 +251,10 @@ public class Main {
         calendar.ajouterEvent(e);
         System.out.println("Événement ajouté.");
     }
+
+    /**
+     * supprime un event avec son ID
+     */
     public void supprimerEvent(){
         String ID = input.lireTexte("ID de l'évènement : ");
         calendar.supprimerEventParId(ID);
@@ -246,7 +263,6 @@ public class Main {
      * Affiche le logo de l'application
      */
     private static void afficherLogo() {
-
         System.out.println("████████████████████████████████████████████▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒████████████████████████████████████████");
         System.out.println("▓▓▓▓▓▓▓▓▓▓████████████▓▓▓▓████████████▓▓▓▓▓▓██████████▓▓▓▓██▓▓██████████▓▓██▓▓████████████▓▓▓▓▓▓▓▓██████████▓▓▓▓▓▓");
         System.out.println("████████████████████████████▓▓▓▓▓▓██████░░░░░░▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒██████▓▓▓▓▓▓▓▓████████▓▓██▓▓▓▓████████");

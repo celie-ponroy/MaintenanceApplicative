@@ -5,9 +5,12 @@ import org.example.Utilisateur;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
+// évènement ajouté qui permet de souscrire à une entreprise
+// et rappel de payer un certain montant tous les 28 jours.
+
 public class EventSouscription extends EventPeriodique{
     //une soucription qui se paye tous les 28 jours
-    protected final double prix;
+    protected final double prix;//montant à payer
     protected final String entreprise; //l'entreprise qui a qui on a souscrit
     public EventSouscription(TitreEvent title, Utilisateur proprietaire, LocalDateTime dateDebut, DureeEvent dureeMinutes, double prix, String entreprise) {
         super(title, proprietaire, dateDebut, dureeMinutes, 28);

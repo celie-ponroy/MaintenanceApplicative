@@ -1,7 +1,7 @@
 package org.example.event;
 
 import java.util.Objects;
-
+//durée des évenements
 public record DureeEvent(int minutes) {
     public DureeEvent {
         if (minutes <= 0) {

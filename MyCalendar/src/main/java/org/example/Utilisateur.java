@@ -2,14 +2,28 @@ package org.example;
 
 import java.util.Objects;
 
+/**
+ * Utilisateur de l'application
+ */
 public class Utilisateur {
-    private String nom;
-    private String motDePasse;
+    private String nom;//nom de l'utilisateur
+    private String motDePasse;//mot de passe de l'utilisateur
 
+    /**
+     * Constructeur
+     * @param nom
+     * @param motDePasse
+     */
     public Utilisateur(String nom, String motDePasse) {
         this.nom = nom;
         this.motDePasse = motDePasse;
     }
+
+    /**
+     * Vérifie si le mot de passe en paramètre est corect
+     * @param motDePasse mot de passe en question
+     * @return
+     */
     public boolean motDePasseCorrect(String motDePasse) {
         return this.motDePasse.equals(motDePasse);
     }
