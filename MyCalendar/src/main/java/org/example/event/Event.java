@@ -1,17 +1,19 @@
-package org.example;
+package org.example.event;
+
+import org.example.Utilisateur;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 public abstract class Event {
     protected EventType type;
-    protected final String title;
+    protected final TitreEvent title;
     protected final String eventId;
     protected final Utilisateur proprietaire;
     protected LocalDateTime dateDebut;
-    protected final int dureeMinutes;
+    protected final DureeEvent dureeMinutes;
 
-    public Event(EventType type, String title, Utilisateur proprietaire, LocalDateTime dateDebut, int dureeMinutes) {
+    public Event(EventType type, TitreEvent title, Utilisateur proprietaire, LocalDateTime dateDebut, DureeEvent dureeMinutes) {
         this.type = type;
         this.title = title;
         if(proprietaire==null) {
@@ -23,10 +25,6 @@ public abstract class Event {
             throw new IllegalArgumentException("La date de début doit être dans le futur");
         }
         this.dateDebut = dateDebut;
-        //verifications duree
-        if (dureeMinutes <= 0) {
-            throw new IllegalArgumentException("La durée doit être positive");
-        }
         this.dureeMinutes = dureeMinutes;
         eventId = UUID.randomUUID().toString();
     }
@@ -46,7 +44,7 @@ public abstract class Event {
         return type;
     }
 
-    public int getDureeMinutes() {
+    public DureeEvent getDureeMinutes() {
         return dureeMinutes;
     }
 
@@ -58,7 +56,7 @@ public abstract class Event {
         return proprietaire;
     }
 
-    public String getTitle() {
+    public TitreEvent getTitle() {
         return title;
     }
 

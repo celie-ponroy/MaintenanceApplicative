@@ -1,5 +1,7 @@
 package org.example;
 
+import org.example.event.Event;
+
 import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
@@ -34,9 +36,9 @@ public class CalendarManager {
      * @return
      */
     public boolean conflit(Event e1, Event e2) {
-        LocalDateTime fin1 = e1.getDateDebut().plusMinutes(e1.getDureeMinutes());
-        LocalDateTime fin2 = e2.getDateDebut().plusMinutes(e2.getDureeMinutes());
-        return e1.isInPeriod(e2.dateDebut,fin2) || e2.isInPeriod(e1.dateDebut,fin1);
+        LocalDateTime fin1 = e1.getDateDebut().plusMinutes(e1.getDureeMinutes().minutes());
+        LocalDateTime fin2 = e2.getDateDebut().plusMinutes(e2.getDureeMinutes().minutes());
+        return e1.isInPeriod(e2.getDateDebut(),fin2) || e2.isInPeriod(e1.getDateDebut(),fin1);
     }
 
     public void afficherEvenements() {

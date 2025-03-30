@@ -1,4 +1,5 @@
 import org.example.*;
+import org.example.event.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

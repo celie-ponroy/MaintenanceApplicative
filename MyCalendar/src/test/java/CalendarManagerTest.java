@@ -1,4 +1,8 @@
 import org.example.*;
+import org.example.event.Event;
+import org.example.event.EventPeriodique;
+import org.example.event.EventRDVPersonnel;
+import org.example.event.FabriqueEvent;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

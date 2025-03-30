@@ -1,5 +1,8 @@
 package org.example;
 
+import org.example.event.Event;
+import org.example.event.FabriqueEvent;
+
 import java.time.LocalDateTime;
 import java.time.temporal.WeekFields;
 import java.util.*;

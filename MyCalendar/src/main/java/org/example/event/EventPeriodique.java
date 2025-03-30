@@ -1,13 +1,13 @@
-package org.example;
+package org.example.event;
 
-import com.sun.java.accessibility.util.EventID;
+import org.example.Utilisateur;
 
 import java.time.LocalDateTime;
 
 public class EventPeriodique extends Event {
     protected final int frequenceJours;
 
-    public EventPeriodique(  String title, Utilisateur proprietaire, LocalDateTime dateDebut, int dureeMinutes, int frequenceJours) {
+    public EventPeriodique(TitreEvent title, Utilisateur proprietaire, LocalDateTime dateDebut, DureeEvent dureeMinutes, int frequenceJours) {
         super(EventType.PERIODIQUE, title, proprietaire, dateDebut, dureeMinutes);
         //verificaiton frequence
         if(frequenceJours < 0) {
@@ -25,7 +25,7 @@ public class EventPeriodique extends Event {
     public boolean isInPeriod(LocalDateTime debut, LocalDateTime fin) {
         LocalDateTime occurrence = this.dateDebut;
         while (!occurrence.isAfter(fin)) {
-            LocalDateTime finOccurrence = occurrence.plusMinutes(this.getDureeMinutes());
+            LocalDateTime finOccurrence = occurrence.plusMinutes(this.getDureeMinutes().minutes());
 
             if (occurrence.isBefore(fin) && finOccurrence.isAfter(debut)) {
                 return true; // conflit

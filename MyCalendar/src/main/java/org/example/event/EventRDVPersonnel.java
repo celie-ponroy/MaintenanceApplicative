@@ -1,9 +1,11 @@
-package org.example;
+package org.example.event;
+
+import org.example.Utilisateur;
 
 import java.time.LocalDateTime;
 
 public class EventRDVPersonnel extends Event{
-    public EventRDVPersonnel( String title, Utilisateur proprietaire, LocalDateTime dateDebut, int dureeMinutes) {
+    public EventRDVPersonnel(TitreEvent title, Utilisateur proprietaire, LocalDateTime dateDebut, DureeEvent dureeMinutes) {
         super(EventType.RDV_PERSONNEL, title, proprietaire, dateDebut, dureeMinutes);
 
     }
