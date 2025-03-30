@@ -3,6 +3,7 @@ package org.example.event;
 import org.example.Utilisateur;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class FabriqueEvent {
     public static EventRDVPersonnel getEventRDV(String title, Utilisateur proprietaire, LocalDateTime dateDebut, int dureeMinutes) {
@@ -12,9 +13,10 @@ public class FabriqueEvent {
             return null;
         }
     }
-    public static EventReunion getEventReunion(String title, Utilisateur proprietaire, LocalDateTime dateDebut, int dureeMinutes, String lieu, String participants) {
+    public static EventReunion getEventReunion(String title, Utilisateur proprietaire, LocalDateTime dateDebut, int dureeMinutes, String lieu, List<Utilisateur> participants) {
         try {
-            return new EventReunion(new TitreEvent(title),proprietaire,dateDebut,new DureeEvent(dureeMinutes),lieu,participants);
+            return new EventReunion(new TitreEvent(title),proprietaire,dateDebut,
+                    new DureeEvent(dureeMinutes),lieu,participants);
         }catch (Exception e) {
             return null;
         }

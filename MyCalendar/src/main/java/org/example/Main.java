@@ -183,13 +183,34 @@ public class Main {
         int duree = input.lireEntier("Durée (en minutes) : ");
         String lieu = input.lireTexte("Lieu :");
 
-        String participants = gestionnaireConnexion.getUtilisateur().getNom();
+        List<Utilisateur> participants = new ArrayList<>();
+        boolean ajouterPlus = true;
 
-        System.out.println("Ajouter un participant ? (oui / non)");
-        while (scanner.nextLine().equals("oui"))
-        {
-            System.out.print("Participants : " + participants);
-            participants += ", " + scanner.nextLine();
+        while (ajouterPlus) {
+            System.out.print("Rechercher un utilisateur (nom) : ");
+            String recherche = scanner.nextLine();
+            List<Utilisateur> resultats = gestionnaireConnexion.rechercherUtilisateurs(recherche);
+
+            if (resultats.isEmpty()) {
+                System.out.println("Aucun utilisateur trouvé.");
+            } else {
+                System.out.println("Sélectionnez un utilisateur (ID) : ");
+                for (int i = 0; i < resultats.size(); i++) {
+                    System.out.println((i + 1) + " - " + resultats.get(i).getNom());
+                }
+
+                int choix = scanner.nextInt();
+                scanner.nextLine(); // Pour éviter le bug de saut de ligne
+
+                if (choix > 0 && choix <= resultats.size()) {
+                    participants.add(resultats.get(choix - 1));
+                } else {
+                    System.out.println("Choix invalide.");
+                }
+            }
+
+            System.out.print("Ajouter un autre participant ? (oui / non) : ");
+            ajouterPlus = scanner.nextLine().equalsIgnoreCase("oui");
         }
         Event e = FabriqueEvent.getEventReunion(titre2, gestionnaireConnexion.getUtilisateur(),
                 debutReunion, duree, lieu, participants);

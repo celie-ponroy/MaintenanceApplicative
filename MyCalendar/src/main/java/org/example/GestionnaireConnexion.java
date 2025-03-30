@@ -2,6 +2,7 @@ package org.example;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class GestionnaireConnexion {
     private Utilisateur utilisateur = null;
@@ -43,5 +44,12 @@ public class GestionnaireConnexion {
     public Utilisateur getUtilisateur() {
         return utilisateur;
     }
+
+    public List<Utilisateur> rechercherUtilisateurs(String filtre) {
+        return utilisateurs.stream()
+                .filter(u -> u.getNom().toLowerCase().contains(filtre.toLowerCase()))
+                .collect(Collectors.toList());
+    }
+
 
 }

@@ -7,6 +7,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -76,7 +77,7 @@ public class CalendarManagerTest {
     @Test
     void testConflit_AvecConflit() {
         Event overlappingEvent = FabriqueEvent.getEventReunion("Autre réunion", sophie,
-                LocalDateTime.of(2026, 3, 25, 10, 30), 60, "Salle 1", "Alice, Bob");
+                LocalDateTime.of(2026, 3, 25, 10, 30), 60, "Salle 1", List.of(new Utilisateur("Alice","12"),new Utilisateur("Bob","22") ));
         assertTrue(calendar.conflit(event1, overlappingEvent));
     }
 
