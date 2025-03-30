@@ -87,7 +87,7 @@ public class CalendarManagerTest {
         Event conflictingEvent = FabriqueEvent.getEventRDV("Autre activité", sophie,
                 LocalDateTime.of(2026, 3, 20, 18, 0),
                 30);
-        
+
         assertTrue(calendar.conflit(periodicEvent, conflictingEvent));
     }
 

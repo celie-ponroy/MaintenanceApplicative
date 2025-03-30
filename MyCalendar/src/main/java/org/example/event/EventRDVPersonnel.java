@@ -18,4 +18,6 @@ public class EventRDVPersonnel extends Event{
     public boolean isInPeriod(LocalDateTime debut, LocalDateTime fin) {
         return !dateDebut.isBefore(debut) && !dateDebut.isAfter(fin);
     }
+
+
 }

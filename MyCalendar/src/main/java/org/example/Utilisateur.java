@@ -1,5 +1,7 @@
 package org.example;
 
+import java.util.Objects;
+
 public class Utilisateur {
     private String nom;
     private String motDePasse;
@@ -29,5 +31,10 @@ public class Utilisateur {
     @Override
     public String toString() {
         return nom;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(nom, motDePasse);
     }
 }

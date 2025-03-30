@@ -4,6 +4,7 @@ import org.example.Utilisateur;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 public class FabriqueEvent {
     public static EventRDVPersonnel getEventRDV(String title, Utilisateur proprietaire, LocalDateTime dateDebut, int dureeMinutes) {
@@ -13,7 +14,7 @@ public class FabriqueEvent {
             return null;
         }
     }
-    public static EventReunion getEventReunion(String title, Utilisateur proprietaire, LocalDateTime dateDebut, int dureeMinutes, String lieu, List<Utilisateur> participants) {
+    public static EventReunion getEventReunion(String title, Utilisateur proprietaire, LocalDateTime dateDebut, int dureeMinutes, String lieu, Set<Utilisateur> participants) {
         try {
             return new EventReunion(new TitreEvent(title),proprietaire,dateDebut,
                     new DureeEvent(dureeMinutes),lieu,participants);
@@ -25,6 +26,7 @@ public class FabriqueEvent {
         try{
             return new EventPeriodique(new TitreEvent(title),proprietaire,dateDebut,new DureeEvent(dureeMinutes),frequenceJours);
         }catch (Exception e) {
+            System.out.println(e.getMessage());
             return null;
         }
     }

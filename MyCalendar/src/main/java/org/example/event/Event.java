@@ -3,6 +3,7 @@ package org.example.event;
 import org.example.Utilisateur;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.UUID;
 
 public abstract class Event {
@@ -47,6 +48,7 @@ public abstract class Event {
     public DureeEvent getDureeMinutes() {
         return dureeMinutes;
     }
+    public int getDureeMinutesInt(){return dureeMinutes.minutes();}
 
     public LocalDateTime getDateDebut() {
         return dateDebut;
@@ -62,5 +64,17 @@ public abstract class Event {
 
     public String getEventId() {
         return eventId;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Event event = (Event) o;
+        return type == event.type && Objects.equals(title, event.title) && Objects.equals(eventId, event.eventId) && Objects.equals(proprietaire, event.proprietaire) && Objects.equals(dateDebut, event.dateDebut) && Objects.equals(dureeMinutes, event.dureeMinutes);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(type, title, eventId, proprietaire, dateDebut, dureeMinutes);
     }
 }

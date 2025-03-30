@@ -183,7 +183,7 @@ public class Main {
         int duree = input.lireEntier("Durée (en minutes) : ");
         String lieu = input.lireTexte("Lieu :");
 
-        List<Utilisateur> participants = new ArrayList<>();
+        Set<Utilisateur> participants  = new HashSet<>();
         boolean ajouterPlus = true;
 
         while (ajouterPlus) {

@@ -12,7 +12,12 @@ public class CalendarManager {
     private final TreeSet<Event> events;
 
     public CalendarManager() {
-        this.events = new TreeSet<>(Comparator.comparing(Event::getDateDebut));
+
+        this.events = new TreeSet<>(Comparator
+                .comparing(Event::getDateDebut)
+                .thenComparing(Event::getDureeMinutesInt)
+                .thenComparing(Event::getEventId));
+
     }
 
     public boolean ajouterEvent(Event event) {
@@ -36,10 +41,14 @@ public class CalendarManager {
      * @return
      */
     public boolean conflit(Event e1, Event e2) {
-        LocalDateTime fin1 = e1.getDateDebut().plusMinutes(e1.getDureeMinutes().minutes());
-        LocalDateTime fin2 = e2.getDateDebut().plusMinutes(e2.getDureeMinutes().minutes());
-        return e1.isInPeriod(e2.getDateDebut(),fin2) || e2.isInPeriod(e1.getDateDebut(),fin1);
+        LocalDateTime debut1 = e1.getDateDebut();
+        LocalDateTime fin1 = debut1.plusMinutes(e1.getDureeMinutes().minutes());
+        LocalDateTime debut2 = e2.getDateDebut();
+        LocalDateTime fin2 = debut2.plusMinutes(e2.getDureeMinutes().minutes());
+
+        return debut1.isBefore(fin2) && debut2.isBefore(fin1);
     }
+
 
     public void afficherEvenements() {
         for (Event e : events) {

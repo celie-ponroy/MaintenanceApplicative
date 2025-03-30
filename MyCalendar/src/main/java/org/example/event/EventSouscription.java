@@ -3,6 +3,7 @@ package org.example.event;
 import org.example.Utilisateur;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 public class EventSouscription extends EventPeriodique{
     //une soucription qui se paye tous les 28 jours
@@ -34,5 +35,18 @@ public class EventSouscription extends EventPeriodique{
     @Override
     public String description() {
         return "Souscription chez : " + entreprise + " de " + prix+" (id: "+ eventId+ ")";
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        EventSouscription that = (EventSouscription) o;
+        return Double.compare(prix, that.prix) == 0 && Objects.equals(entreprise, that.entreprise);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), prix, entreprise);
     }
 }
